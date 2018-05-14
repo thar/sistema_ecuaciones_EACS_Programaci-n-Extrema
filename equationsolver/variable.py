@@ -7,14 +7,15 @@ class Variable(Term):
         Term.__init__(self, value)
         self._name = name
 
+    @property
+    def name(self):
+        return self._name
+
     def has_name(self, name):
         return self._name == name
 
     def has_name_set(self, name_set):
         return self._name in name_set
-
-    def equal(self, other):
-        return self._name == other.has_name(self._name) and self.value == other.value
 
     def clon(self):
         return deepcopy(self)
