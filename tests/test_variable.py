@@ -39,8 +39,6 @@ class VariableTestCase(unittest.TestCase):
         variable1 = Variable('x', 3.0)
         variable2 = Mock()
         variable2.value = 3.0
-        variable2.has_name = Mock(return_value=False)
-        variable2.has_name_set = Mock(return_value=False)
         variable2.dispatch = Mock(side_effect=lambda x: x.visit_constant(variable2))
         self.assertFalse(variable1.equal(variable2))
 
@@ -48,8 +46,6 @@ class VariableTestCase(unittest.TestCase):
         variable1 = Variable('x', 3.0)
         variable2 = Mock()
         variable2.value = 2.0
-        variable2.has_name = Mock(return_value=False)
-        variable2.has_name_set = Mock(return_value=False)
         variable2.dispatch = Mock(side_effect=lambda x: x.visit_constant(variable2))
         self.assertFalse(variable1.equal(variable2))
 
