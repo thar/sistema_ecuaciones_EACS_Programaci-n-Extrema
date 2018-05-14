@@ -8,13 +8,13 @@ class Variable(Term):
         self._name = name
 
     def has_name(self, name):
-        return False
+        return self._name == name
 
     def has_name_set(self, name_set):
-        return False
+        return self._name in name_set
 
     def equal(self, other):
-        return False
+        return self._name == other._name and self._value == other._value
 
     def clon(self):
         return deepcopy(self)
