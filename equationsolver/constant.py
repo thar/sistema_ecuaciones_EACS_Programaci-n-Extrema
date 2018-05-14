@@ -7,7 +7,7 @@ class Constant(Term):
         Term.__init__(self, value)
 
     def equal(self, other):
-        return self._value == other._value
+        return self.value == other.value
 
     def clon(self):
         return deepcopy(self)

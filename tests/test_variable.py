@@ -1,32 +1,7 @@
 import unittest
+from mock import patch, Mock
 
-from equationsolver.term_visitor import TermVisitor
 from equationsolver.variable import Variable
-
-
-class TermVisitorMock(TermVisitor):
-    def __init__(self):
-        TermVisitor.__init__(self)
-        self._constant_call_count = 0
-        self._variable_call_count = 0
-
-    def visit_constant(self, variable):
-        self._constant_call_count += 1
-
-    def visit_variable(self, variable):
-        self._variable_call_count += 1
-
-    @property
-    def visit_constant_count(self):
-        return self._constant_call_count
-
-    @property
-    def visit_variable_count(self):
-        return self._variable_call_count
-
-    @property
-    def total_count(self):
-        return self.visit_constant_count + self.visit_variable_count
 
 
 class VariableTestCase(unittest.TestCase):
@@ -60,6 +35,24 @@ class VariableTestCase(unittest.TestCase):
         variable2 = Variable('y', 3.1)
         self.assertFalse(variable1.equal(variable2))
 
+    def testEqualWithConstantSameValueNegative(self):
+        variable1 = Variable('x', 3.0)
+        variable2 = Mock()
+        variable2.value = 3.0
+        variable2.has_name = Mock(return_value=False)
+        variable2.has_name_set = Mock(return_value=False)
+        variable2.dispatch = Mock(side_effect=lambda x: x.visit_constant(variable2))
+        self.assertFalse(variable1.equal(variable2))
+
+    def testEqualWithConstantDifferentValueNegative(self):
+        variable1 = Variable('x', 3.0)
+        variable2 = Mock()
+        variable2.value = 2.0
+        variable2.has_name = Mock(return_value=False)
+        variable2.has_name_set = Mock(return_value=False)
+        variable2.dispatch = Mock(side_effect=lambda x: x.visit_constant(variable2))
+        self.assertFalse(variable1.equal(variable2))
+
     def testClon(self):
         variable1 = Variable('x', 3.0)
         variable2 = variable1.clon()
@@ -84,9 +77,9 @@ class VariableTestCase(unittest.TestCase):
         name_set = ['z', 'y']
         self.assertFalse(variable1.has_name_set(name_set))
 
-    def testDispatcher(self):
+    @patch('equationsolver.term_visitor.TermVisitor')
+    def testDispatcher(self, TermVisitor):
         variable1 = Variable('x', 3.0)
-        term_visitor = TermVisitorMock()
+        term_visitor = TermVisitor()
         variable1.dispatch(term_visitor)
-        self.assertEqual(term_visitor.visit_variable_count, 1)
-        self.assertEqual(term_visitor.total_count, 1)
+        self.assertEqual(term_visitor.visit_variable.call_count, 1)
