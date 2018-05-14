@@ -40,10 +40,25 @@ class VariableTestCase(unittest.TestCase):
         variable.multiply(2.0)
         self.assertEqual(variable.value, 6.0)
 
-    def testEqual(self):
+    def testEqualPositive(self):
         variable1 = Variable('x', 3.0)
         variable2 = Variable('x', 3.0)
         self.assertTrue(variable1.equal(variable2))
+
+    def testEqualNegativeValue(self):
+        variable1 = Variable('x', 3.0)
+        variable2 = Variable('x', 3.1)
+        self.assertFalse(variable1.equal(variable2))
+
+    def testEqualNegativeName(self):
+        variable1 = Variable('x', 3.0)
+        variable2 = Variable('y', 3.0)
+        self.assertFalse(variable1.equal(variable2))
+
+    def testEqualNegativeValueAndName(self):
+        variable1 = Variable('x', 3.0)
+        variable2 = Variable('y', 3.1)
+        self.assertFalse(variable1.equal(variable2))
 
     def testClon(self):
         variable1 = Variable('x', 3.0)
