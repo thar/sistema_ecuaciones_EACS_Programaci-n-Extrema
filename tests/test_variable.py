@@ -31,6 +31,10 @@ class TermVisitorMock(TermVisitor):
 
 class VariableTestCase(unittest.TestCase):
 
+    def testValue(self):
+        variable = Variable('x', 3.0)
+        self.assertEqual(variable.value, 3.0)
+
     def testMultiply(self):
         variable = Variable('x', 3.0)
         variable.multiply(2.0)
