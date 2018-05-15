@@ -72,7 +72,8 @@ class EquationTestCase(unittest.TestCase):
     def testGivenDefaultEquationWhenMultiplyBy0ThenValue0IsObtainedInBothTerms(self):
         equation = EquationBuilder.x_equals_1()
         equation.multiply(0.0)
-        self.assertEqual(equation.get_value('x'), 0.0)
+        self.assertRaises(LookupError, equation.get_value, 'x')
+        self.assertEqual(equation.get_value_side(Side.left), 0.0)
         self.assertEqual(equation.get_value_side(Side.right), 0.0)
 
     # get_value tests

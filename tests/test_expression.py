@@ -196,6 +196,13 @@ class ExpressionTestCase(unittest.TestCase):
         self.assertEqual(expression.get_value(), constant.value)
         self.assertEqual(expression.get_value_name(variable.name), variable.value)
 
+    def testGivenExpressionWithVariableWhenMultiplyBy0ThenExpressionWithConstant0IsObtained(self):
+        variable = VariableBuilder().build()
+        expression = ExpressionBuilder().term(variable).build()
+        expression.multiply(0.0)
+        self.assertEqual(expression.get_value(), 0)
+        self.assertRaises(LookupError, expression.get_value_name, variable.name)
+
     # simplify tests
     def testGivenExpressionWithOneConstantWhenSimplifyThenSameExpressionIsObtained(self):
         expression = ExpressionBuilder().default_constant().build()

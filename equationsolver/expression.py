@@ -31,6 +31,12 @@ class Expression:
     def multiply(self, value):  # tests done
         for term in self._term_list:
             term.multiply(value)
+        if 0 == value:
+            terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
+            terms = terms_counter_analyzer.get_variables()
+            self._remove_terms(terms)
+            if 0 == len(self._term_list):
+                self._term_list.append(Constant(0))
 
     def _get_added_terms_value(self, terms):
         term_value = 0.0
