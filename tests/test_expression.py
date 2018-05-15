@@ -1,9 +1,9 @@
 import unittest
 
+from equationsolver.constant_builder import ConstantBuilder
 from equationsolver.expression import NotSimplified, EmptyExpression
-from expression_builder import ExpressionBuilder
-from constant_builder import ConstantBuilder
-from variable_builder import VariableBuilder
+from equationsolver.expression_builder import ExpressionBuilder
+from equationsolver.variable_builder import VariableBuilder
 
 
 class ExpressionTestCase(unittest.TestCase):
