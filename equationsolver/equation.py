@@ -2,6 +2,7 @@ from copy import deepcopy
 
 from enum import Enum
 
+from equationsolver.expression import NotSimplified
 from equationsolver.expression_builder import ExpressionBuilder
 
 
@@ -12,50 +13,79 @@ class Side(Enum):
 
 class Equation:
     def __init__(self, left_expression=None, right_expression=None):
+        self._expression = {}
         if left_expression:
-            self._left_expression = left_expression
+            self._expression[Side.left] = left_expression
         else:
-            self._left_expression = ExpressionBuilder().build()
+            self._expression[Side.left] = ExpressionBuilder().build()
         if right_expression:
-            self._right_expression = right_expression
+            self._expression[Side.right] = right_expression
         else:
-            self._right_expression = ExpressionBuilder().build()
+            self._expression[Side.right] = ExpressionBuilder().build()
 
     def add(self, term):
-        pass
+        self._expression[Side.left].add_term(term)
+        self._expression[Side.right].add_term(term)
 
     def add_side(self, side, term):
-        pass
+        self._expression[side].add_term(term)
 
     def add_equation(self, equation):
-        pass
+        for side in Side:
+            self._expression[side].add_expression(equation._expression[side])
 
     def multiply(self, value):
-        pass
+        for side in Side:
+            self._expression[side].multiply(value)
 
     def get_value(self, name):
-        return 0.0
+        value = {}
+        for side in Side:
+            if name in self._expression[side].get_name_set():
+                value[side] = self._expression[side].get_value_name(name)
+        if 1 == len(value):
+            return value.values()[0]
+        elif 0 == len(value):
+            raise LookupError
+        else:
+            raise NotSimplified
 
     def get_value_side(self, side):
-        return 0.0
+        return self._expression[side].get_value()
 
     def simplify_name(self, side, name):
-        pass
+        self._expression[side].simplify_name(name)
 
     def simplify(self, side):
-        pass
+        self._expression[side].simplify()
 
     def get_name_set(self):
-        return ['x']
+        name_set = set()
+        for side in Side:
+            name_set.update(self._expression[side].get_name_set())
+        return name_set
 
     def equal(self, equation):
-        return False
+        return (self._expression[Side.left].equal(equation._expression[Side.left]) and
+                self._expression[Side.right].equal(equation._expression[Side.right])) \
+               or (self._expression[Side.left].equal(equation._expression[Side.right]) and
+                   self._expression[Side.right].equal(equation._expression[Side.left]))
 
     def clon(self):
         return deepcopy(self)
 
     def apply(self, name, value):
-        pass
+        if name not in self.get_name_set():
+            raise LookupError
+        for side in Side:
+            if name in self._expression[side].get_name_set():
+                self._expression[side].apply(name, value)
 
     def invert(self):
-        pass
+        new_expression = {
+            Side.left: self._expression[Side.right],
+            Side.right: self._expression[Side.left]
+        }
+
+    def __str__(self):
+        return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
