@@ -11,3 +11,6 @@ class Constant(Term):
 
     def dispatch(self, term_visitor):
         term_visitor.visit_constant(self)
+
+    def __str__(self):
+        return str(self.value)
