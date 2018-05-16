@@ -1,8 +1,5 @@
 from copy import deepcopy
-
 from enum import Enum
-
-from equationsolver.expression import NotSimplified
 from equationsolver.expression_builder import ExpressionBuilder
 
 
