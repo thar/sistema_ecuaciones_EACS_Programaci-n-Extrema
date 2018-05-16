@@ -7,6 +7,35 @@ from equationsolver.variable_builder import VariableBuilder
 
 
 class ExpressionTestCase(unittest.TestCase):
+    # add_term tests
+    def testGivenExpressionWithVariableWhenAddZeroThenNoConstantIsAdded(self):
+        expression = ExpressionBuilder().default_variable().build()
+        expression_original = expression.clon()
+        zero = ConstantBuilder().value(0).build()
+        expression.add_term(zero)
+        self.assertEqual(str(expression), str(expression_original))
+
+    def testGivenExpressionWithConstantWhenAddZeroValueVariableThenNoVariableIsAdded(self):
+        expression = ExpressionBuilder().default_constant().build()
+        expression_original = expression.clon()
+        zero = VariableBuilder().value(0).build()
+        expression.add_term(zero)
+        self.assertEqual(str(expression), str(expression_original))
+
+    def testGivenExpressionWithConstantWhenAddZeroThenNoConstantIsAdded(self):
+        expression = ExpressionBuilder().default_constant().build()
+        expression_original = expression.clon()
+        zero = ConstantBuilder().value(0).build()
+        expression.add_term(zero)
+        self.assertEqual(str(expression), str(expression_original))
+
+    def testGivenExpressionWithVariableWhenAddZeroValueVariableThenNoVariableIsAdded(self):
+        expression = ExpressionBuilder().default_variable().build()
+        expression_original = expression.clon()
+        zero = VariableBuilder().value(0).build()
+        expression.add_term(zero)
+        self.assertEqual(str(expression), str(expression_original))
+
     # get_value tests
     def testGivenExpressionWithOnlyAConstantAsTermWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
