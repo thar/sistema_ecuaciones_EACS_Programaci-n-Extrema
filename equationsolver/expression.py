@@ -74,7 +74,7 @@ class Expression:
         else:
             return 0
 
-    def get_value_name(self, name):  # tests done
+    def get_value_variable(self, name):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
         if 1 == len(terms):

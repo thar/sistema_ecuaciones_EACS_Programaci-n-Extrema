@@ -31,32 +31,32 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().default_constant().default_constant().build()
         self.assertRaises(NotSimplified, expression.get_value)
 
-    # get_value_name tests
+    # get_value_variable tests
     def testGivenExpressionWithVariableWhenGetValueNameThenVariableValueIsReturned(self):
         variable = VariableBuilder().name('x').build()
         expression = ExpressionBuilder().term(variable).build()
-        self.assertEqual(expression.get_value_name('x'), variable.value)
+        self.assertEqual(expression.get_value_variable('x'), variable.value)
 
     def testGivenExpressionWithTwoVariablesWithSameNameWhenGetValueNameThenNotSimplifiedIsRaised(self):
         variable = VariableBuilder().name('x').build()
         expression = ExpressionBuilder().term(variable).term(variable.clon()).build()
-        self.assertRaises(NotSimplified, expression.get_value_name, 'x')
+        self.assertRaises(NotSimplified, expression.get_value_variable, 'x')
 
     def testGivenExpressionWithVariableAndConstantWhenGetValueNameThenVariableValueIsReturned(self):
         variable = VariableBuilder().name('x').build()
         expression = ExpressionBuilder().default_constant().term(variable).build()
-        self.assertEqual(expression.get_value_name('x'), variable.value)
+        self.assertEqual(expression.get_value_variable('x'), variable.value)
 
     def testGivenExpressionTwoWithVariablesWithDifferentNamesWhenGetValueNameThenCorrectVariableValueIsReturned(self):
         variable = VariableBuilder().name('x').build()
         expression = ExpressionBuilder().term(VariableBuilder().name('y').build()).term(variable).build()
-        self.assertEqual(expression.get_value_name('x'), variable.value)
+        self.assertEqual(expression.get_value_variable('x'), variable.value)
 
     def testGivenExpressionWithVariablesWithSpecificNamesWhenGetValueNameWithOtherVariableNameThen0IsReturned(
             self):
         expression = ExpressionBuilder().term(VariableBuilder().name('y').build()).term(
             VariableBuilder().name('z').build()).default_constant().build()
-        self.assertEqual(expression.get_value_name('x'), 0)
+        self.assertEqual(expression.get_value_variable('x'), 0)
 
     # apply tests
     def testGivenExpressionWithVariableWhenApplyThenGetValueReturnsCorrectValue(self):
@@ -184,14 +184,14 @@ class ExpressionTestCase(unittest.TestCase):
         constant.multiply(multiply_value)
         variable.multiply(multiply_value)
         self.assertEqual(expression.get_value(), constant.value)
-        self.assertEqual(expression.get_value_name(variable.name), variable.value)
+        self.assertEqual(expression.get_value_variable(variable.name), variable.value)
 
     def testGivenExpressionWithVariableWhenMultiplyBy0ThenExpressionWithConstant0IsObtained(self):
         variable = VariableBuilder().build()
         expression = ExpressionBuilder().term(variable).build()
         expression.multiply(0.0)
         self.assertEqual(expression.get_value(), 0)
-        self.assertEqual(expression.get_value_name(variable.name), 0.0)
+        self.assertEqual(expression.get_value_variable(variable.name), 0.0)
 
     # simplify tests
     def testGivenExpressionWithOneConstantWhenSimplifyThenSameExpressionIsObtained(self):
@@ -239,7 +239,7 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(variable1).term(variable1).term(
             VariableBuilder().name('y').build()).default_constant().build()
         expression.simplify_name(variable1.name)
-        self.assertTrue(expression.get_value_name(variable1.name), 2 * variable1.value)
+        self.assertTrue(expression.get_value_variable(variable1.name), 2 * variable1.value)
 
     def testGivenExpressionWithTwoVariablesWithInverseValuesWhenSimplifyThenExpressionWithNoVariablesAndConstantWithValue0IsObtained(
             self):
@@ -249,4 +249,4 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(variable1).term(variable2).build()
         expression.simplify_name(variable1.name)
         self.assertEqual(expression.get_value(), 0.0)
-        self.assertEqual(expression.get_value_name(variable1.name), 0.0)
+        self.assertEqual(expression.get_value_variable(variable1.name), 0.0)

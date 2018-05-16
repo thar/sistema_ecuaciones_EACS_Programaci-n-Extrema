@@ -38,11 +38,11 @@ class Equation:
         for side in Side:
             self._expression[side].multiply(value)
 
-    def get_value(self, name):
+    def get_value_variable(self, name):
         value = {}
         for side in Side:
             if name in self._expression[side].get_name_set():
-                value[side] = self._expression[side].get_value_name(name)
+                value[side] = self._expression[side].get_value_variable(name)
         if 1 == len(value):
             return value.values()[0]
         elif 0 == len(value):
