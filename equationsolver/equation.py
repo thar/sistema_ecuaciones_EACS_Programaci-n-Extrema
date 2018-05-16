@@ -50,7 +50,7 @@ class Equation:
         else:
             raise NotSimplified
 
-    def get_value_side(self, side):
+    def get_value_constant(self, side):
         return self._expression[side].get_value()
 
     def simplify_name(self, side, name):

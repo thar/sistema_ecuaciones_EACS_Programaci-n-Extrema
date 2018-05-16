@@ -18,32 +18,32 @@ class EquationTestCase(unittest.TestCase):
         self.assertEqual(equation.get_name_set(), {term.name})
         equation.add_side(Side.left, inverse_term)
         equation.simplify_name(Side.left, term.name)
-        self.assertEqual(equation.get_value_side(Side.left), 0.0)
+        self.assertEqual(equation.get_value_constant(Side.left), 0.0)
         self.assertEqual(equation.get_name_set(), {term.name})
         equation.add_side(Side.right, inverse_term)
         equation.simplify_name(Side.right, term.name)
-        self.assertEqual(equation.get_value_side(Side.right), 0.0)
+        self.assertEqual(equation.get_value_constant(Side.right), 0.0)
         self.assertEqual(equation.get_name_set(), set())
 
     def testGivenEmptyEquationWhenAddConstantThenItIsAddedInBothSides(self):
         equation = EquationBuilder().build()
         term = ConstantBuilder().build()
         equation.add(term)
-        self.assertEqual(equation.get_value_side(Side.left), term.value)
-        self.assertEqual(equation.get_value_side(Side.right), term.value)
+        self.assertEqual(equation.get_value_constant(Side.left), term.value)
+        self.assertEqual(equation.get_value_constant(Side.right), term.value)
 
     # add_side tests
     def testGivenEmptyEquationWhenAddConstantSideLeftThenItIsAddedInLeftSide(self):
         equation = EquationBuilder().build()
         term = ConstantBuilder().value(1.0).build()
         equation.add_side(Side.left, term)
-        self.assertEqual(equation.get_value_side(Side.left), term.value)
+        self.assertEqual(equation.get_value_constant(Side.left), term.value)
 
     def testGivenEmptyEquationWhenAddConstantSideRightThenItIsAddedInRightSide(self):
         equation = EquationBuilder().build()
         term = ConstantBuilder().value(1.0).build()
         equation.add_side(Side.right, term)
-        self.assertEqual(equation.get_value_side(Side.right), term.value)
+        self.assertEqual(equation.get_value_constant(Side.right), term.value)
 
     # add_equation tests
     def testGivenEmptyEquationWhenAddEquationThenEquationIsEqualToAddedEquation(self):
@@ -71,8 +71,8 @@ class EquationTestCase(unittest.TestCase):
         equation = EquationBuilder.x_equals_1()
         equation.multiply(0.0)
         self.assertEqual(equation.get_value_variable('x'), 0.0)
-        self.assertEqual(equation.get_value_side(Side.left), 0.0)
-        self.assertEqual(equation.get_value_side(Side.right), 0.0)
+        self.assertEqual(equation.get_value_constant(Side.left), 0.0)
+        self.assertEqual(equation.get_value_constant(Side.right), 0.0)
 
     # get_value tests
     def testGivenEmptyEquationWhenGetValueThen0IsReturned(self):
@@ -108,28 +108,28 @@ class EquationTestCase(unittest.TestCase):
     # get_value_side tests
     def testGivenEmptyEquationWhenGetValueSideThenReturns0(self):
         equation = EquationBuilder().build()
-        self.assertEqual(equation.get_value_side(Side.left), 0)
-        self.assertEqual(equation.get_value_side(Side.right), 0)
+        self.assertEqual(equation.get_value_constant(Side.left), 0)
+        self.assertEqual(equation.get_value_constant(Side.right), 0)
 
     def testGivenEquationWithOneConstantAtLeftWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
         equation = EquationBuilder().left_term(constant).build()
-        self.assertEqual(equation.get_value_side(Side.left), constant.value)
+        self.assertEqual(equation.get_value_constant(Side.left), constant.value)
 
     def testGivenEquationWithOneConstantAtRightWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
         equation = EquationBuilder().right_term(constant).build()
-        self.assertEqual(equation.get_value_side(Side.right), constant.value)
+        self.assertEqual(equation.get_value_constant(Side.right), constant.value)
 
     def testGivenEquationWithSameConstantTwiceAtLeftSidesWhenGetValueThenRaisesNotSimplified(self):
         constant = ConstantBuilder().build()
         equation = EquationBuilder().left_term(constant).left_term(constant).build()
-        self.assertRaises(NotSimplified, equation.get_value_side, Side.left)
+        self.assertRaises(NotSimplified, equation.get_value_constant, Side.left)
 
     def testGivenEquationWithSameConstantTwiceAtRightSidesWhenGetValueThenRaisesNotSimplified(self):
         constant = ConstantBuilder().build()
         equation = EquationBuilder().right_term(constant).right_term(constant).build()
-        self.assertRaises(NotSimplified, equation.get_value_side, Side.right)
+        self.assertRaises(NotSimplified, equation.get_value_constant, Side.right)
 
     # simplify_name tests
     def testGivenEquationSameVariableTwiceAtLeftWithNameXWhenSimplifyNameXThenVariableIsSimplified(self):
@@ -149,13 +149,13 @@ class EquationTestCase(unittest.TestCase):
         term = ConstantBuilder().build()
         equation = EquationBuilder().left_term(term).left_term(term).build()
         equation.simplify(Side.left)
-        self.assertEqual(equation.get_value_side(Side.left), 2 * term.value)
+        self.assertEqual(equation.get_value_constant(Side.left), 2 * term.value)
 
     def testGivenEquationSameConstantTwiceAtRightWhenSimplifyThenConstantIsSimplified(self):
         term = ConstantBuilder().build()
         equation = EquationBuilder().right_term(term).right_term(term).build()
         equation.simplify(Side.right)
-        self.assertEqual(equation.get_value_side(Side.right), 2 * term.value)
+        self.assertEqual(equation.get_value_constant(Side.right), 2 * term.value)
 
     # get_name_set tests
     def testGivenEmptyEquationWhenGetNameSetThenEmptyNameSetIsReturned(self):
@@ -219,4 +219,4 @@ class EquationTestCase(unittest.TestCase):
     def testGivenXEqualsOneEquationWhenInvertThenEquationOneEqualsXIsReturned(self):
         eq = EquationBuilder.x_equals_1()
         eq.invert()
-        self.assertEqual(eq.get_value_side(Side.left), 1.0)
+        self.assertEqual(eq.get_value_constant(Side.left), 1.0)
