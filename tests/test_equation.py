@@ -70,40 +70,35 @@ class EquationTestCase(unittest.TestCase):
     def testGivenDefaultEquationWhenMultiplyBy0ThenValue0IsObtainedInBothTerms(self):
         equation = EquationBuilder.x_equals_1()
         equation.multiply(0.0)
-        self.assertEqual(equation.get_value_variable('x'), 0.0)
+        self.assertEqual(equation.get_name_set(), set())
         self.assertEqual(equation.get_value_constant(Side.left), 0.0)
         self.assertEqual(equation.get_value_constant(Side.right), 0.0)
 
     # get_value tests
     def testGivenEmptyEquationWhenGetValueThen0IsReturned(self):
         equation = EquationBuilder().build()
-        self.assertEqual(equation.get_value_variable('x'), 0.0)
+        self.assertEqual(equation.get_value_variable(Side.left, 'x'), 0.0)
+        self.assertEqual(equation.get_value_variable(Side.right, 'x'), 0.0)
 
     def testGivenEquationWithOneVariableAtLeftWhenGetValueThenVariableValueIsReturned(self):
         variable = VariableBuilder().build()
         equation = EquationBuilder().left_term(variable).right_default_constant().build()
-        self.assertEqual(equation.get_value_variable(variable.name), variable.value)
+        self.assertEqual(equation.get_value_variable(Side.left, variable.name), variable.value)
 
     def testGivenEquationWithOneVariableAtRightWhenGetValueThenVariableValueIsReturned(self):
         variable = VariableBuilder().build()
         equation = EquationBuilder().right_term(variable).left_default_constant().build()
-        self.assertEqual(equation.get_value_variable(variable.name), variable.value)
-
-    def testGivenEquationWithSameVariableAtBothSidesWhenGetValueThenRaisesNotSimplified(self):
-        equation = EquationBuilder().build()
-        variable = VariableBuilder().build()
-        equation.add(variable)
-        self.assertRaises(NotSimplified, equation.get_value_variable, variable.name)
+        self.assertEqual(equation.get_value_variable(Side.right, variable.name), variable.value)
 
     def testGivenEquationWithSameVariableTwiceAtLeftSidesWhenGetValueThenRaisesNotSimplified(self):
         variable = VariableBuilder().build()
         equation = EquationBuilder().left_term(variable).left_term(variable).right_default_constant().build()
-        self.assertRaises(NotSimplified, equation.get_value_variable, variable.name)
+        self.assertRaises(NotSimplified, equation.get_value_variable, Side.left, variable.name)
 
     def testGivenEquationWithSameVariableTwiceAtRightSidesWhenGetValueThenRaisesNotSimplified(self):
         variable = VariableBuilder().build()
         equation = EquationBuilder().right_term(variable).right_term(variable).left_default_constant().build()
-        self.assertRaises(NotSimplified, equation.get_value_variable, variable.name)
+        self.assertRaises(NotSimplified, equation.get_value_variable, Side.right, variable.name)
 
     # get_value_side tests
     def testGivenEmptyEquationWhenGetValueSideThenReturns0(self):
@@ -136,13 +131,13 @@ class EquationTestCase(unittest.TestCase):
         term = VariableBuilder().build()
         equation = EquationBuilder().left_term(term).left_term(term).right_default_constant().build()
         equation.simplify_name(Side.left, term.name)
-        self.assertEqual(equation.get_value_variable(term.name), 2 * term.value)
+        self.assertEqual(equation.get_value_variable(Side.left, term.name), 2 * term.value)
 
     def testGivenEquationSameVariableTwiceAtRightWithNameXWhenSimplifyNameXThenVariableIsSimplified(self):
         term = VariableBuilder().build()
         equation = EquationBuilder().right_term(term).right_term(term).left_default_constant().build()
         equation.simplify_name(Side.right, term.name)
-        self.assertEqual(equation.get_value_variable(term.name), 2 * term.value)
+        self.assertEqual(equation.get_value_variable(Side.right, term.name), 2 * term.value)
 
     # simplify tests
     def testGivenEquationSameConstantTwiceAtLeftWhenSimplifyThenConstantIsSimplified(self):
