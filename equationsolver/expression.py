@@ -14,17 +14,17 @@ class Expression:
     def __init__(self):
         self._term_list = []
 
-    def empty(self):  # tests done
+    def empty(self):
         return len(self._term_list) is 0
 
-    def add_term(self, term):  # tests done
+    def add_term(self, term):
         self._term_list.append(term.clon())
 
-    def add_expression(self, expression):  # tests done
+    def add_expression(self, expression):
         for term in expression._term_list:
             self.add_term(term)
 
-    def multiply(self, value):  # tests done
+    def multiply(self, value):
         for term in self._term_list:
             term.multiply(value)
         if 0 == value:
@@ -44,7 +44,7 @@ class Expression:
         for term in terms:
             self._term_list.remove(term)
 
-    def simplify_constant(self):  # tests done
+    def simplify_constant(self):
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_constants()
         if 0 == len(terms):
@@ -52,7 +52,7 @@ class Expression:
         self._remove_terms(terms)
         self.add_term(ConstantBuilder().value(self._get_added_terms_value(terms)).build())
 
-    def simplify_variable(self, name):  # tests done
+    def simplify_variable(self, name):
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
         if 0 == len(terms):
@@ -64,7 +64,7 @@ class Expression:
         else:
             self.add_term(Variable(name, variable_value))
 
-    def get_value_constant(self):  # tests done
+    def get_value_constant(self):
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         constants = terms_counter_analyzer.get_constants()
         if 1 == len(constants):
@@ -74,7 +74,7 @@ class Expression:
         else:
             return 0
 
-    def get_value_variable(self, name):  # tests done
+    def get_value_variable(self, name):
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
         if 1 == len(terms):
@@ -84,14 +84,14 @@ class Expression:
         else:
             return 0
 
-    def get_name_set(self):  # tests done
+    def get_name_set(self):
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         return terms_counter_analyzer.get_variables_names_set()
 
-    def has_name(self, name):  # tests done
+    def has_name(self, name):
         return name in self.get_name_set()
 
-    def apply(self, name, value):  # tests done
+    def apply(self, name, value):
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
         if len(terms) == 0:
@@ -101,7 +101,7 @@ class Expression:
             term.multiply(value)
             self.add_term(ConstantBuilder().value(term.value).build())
 
-    def equal(self, expression):  # tests done
+    def equal(self, expression):
         for term1 in self._term_list:
             found = False
             for term2 in expression._term_list:
@@ -112,7 +112,7 @@ class Expression:
                 return False
         return True
 
-    def clon(self):  # tests done
+    def clon(self):
         return deepcopy(self)
 
     def __str__(self):
