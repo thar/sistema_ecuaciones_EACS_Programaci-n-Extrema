@@ -18,7 +18,8 @@ class Expression:
         return len(self._term_list) is 0
 
     def add_term(self, term):
-        self._term_list.append(term.clon())
+        if len(self._term_list) == 0 or term.value != 0:
+            self._term_list.append(term.clon())
 
     def add_expression(self, expression):
         for term in expression._term_list:
