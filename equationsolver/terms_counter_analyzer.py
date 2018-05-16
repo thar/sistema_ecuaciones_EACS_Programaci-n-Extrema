@@ -28,6 +28,9 @@ class TermsCounterAnalyzer(TermVisitor):
                 variables_array.extend(variables)
         return variables_array
 
+    def get_variables_count(self):
+        return len(self.get_variables())
+
     def get_variables_with_name(self, name):
         if name in self.count_map:
             return self.count_map[name]
