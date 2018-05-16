@@ -225,12 +225,12 @@ class ExpressionTestCase(unittest.TestCase):
         variable = VariableBuilder().build()
         expression = ExpressionBuilder().term(variable).build()
         expression2 = expression.clon()
-        expression.simplify_name(variable.name)
+        expression.simplify_variable(variable.name)
         self.assertTrue(expression.equal(expression2))
 
     def testGivenEmpyExpressionWhenSimplifyNameThenEmptyExpressionIsObtained(self):
         expression = ExpressionBuilder().build()
-        expression.simplify_name('any_name')
+        expression.simplify_variable('any_name')
         self.assertTrue(expression.empty())
 
     def testGivenExpressionWithTwoVariablesSameNameWhenSimplifyThenExpressionWithOneVariableWithCorrectValueIsObtained(
@@ -238,7 +238,7 @@ class ExpressionTestCase(unittest.TestCase):
         variable1 = VariableBuilder().name('x').build()
         expression = ExpressionBuilder().term(variable1).term(variable1).term(
             VariableBuilder().name('y').build()).default_constant().build()
-        expression.simplify_name(variable1.name)
+        expression.simplify_variable(variable1.name)
         self.assertTrue(expression.get_value_variable(variable1.name), 2 * variable1.value)
 
     def testGivenExpressionWithTwoVariablesWithInverseValuesWhenSimplifyThenExpressionWithNoVariablesAndConstantWithValue0IsObtained(
@@ -247,6 +247,6 @@ class ExpressionTestCase(unittest.TestCase):
         variable2 = variable1.clon()
         variable2.multiply(-1.0)
         expression = ExpressionBuilder().term(variable1).term(variable2).build()
-        expression.simplify_name(variable1.name)
+        expression.simplify_variable(variable1.name)
         self.assertEqual(expression.get_value_constant(), 0.0)
         self.assertEqual(expression.get_value_variable(variable1.name), 0.0)

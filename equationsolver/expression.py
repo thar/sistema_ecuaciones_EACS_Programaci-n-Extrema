@@ -52,7 +52,7 @@ class Expression:
         self._remove_terms(terms)
         self.add_term(ConstantBuilder().value(self._get_added_terms_value(terms)).build())
 
-    def simplify_name(self, name):  # tests done
+    def simplify_variable(self, name):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
         if 0 == len(terms):

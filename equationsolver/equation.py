@@ -44,8 +44,8 @@ class Equation:
     def get_value_constant(self, side):
         return self._expression[side].get_value_constant()
 
-    def simplify_name(self, side, name):
-        self._expression[side].simplify_name(name)
+    def simplify_variable(self, side, name):
+        self._expression[side].simplify_variable(name)
 
     def simplify(self, side):
         self._expression[side].simplify()

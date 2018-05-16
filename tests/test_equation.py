@@ -17,11 +17,11 @@ class EquationTestCase(unittest.TestCase):
         equation.add(term)
         self.assertEqual(equation.get_name_set(), {term.name})
         equation.add_side(Side.left, inverse_term)
-        equation.simplify_name(Side.left, term.name)
+        equation.simplify_variable(Side.left, term.name)
         self.assertEqual(equation.get_value_constant(Side.left), 0.0)
         self.assertEqual(equation.get_name_set(), {term.name})
         equation.add_side(Side.right, inverse_term)
-        equation.simplify_name(Side.right, term.name)
+        equation.simplify_variable(Side.right, term.name)
         self.assertEqual(equation.get_value_constant(Side.right), 0.0)
         self.assertEqual(equation.get_name_set(), set())
 
@@ -130,13 +130,13 @@ class EquationTestCase(unittest.TestCase):
     def testGivenEquationSameVariableTwiceAtLeftWithNameXWhenSimplifyNameXThenVariableIsSimplified(self):
         term = VariableBuilder().build()
         equation = EquationBuilder().left_term(term).left_term(term).right_default_constant().build()
-        equation.simplify_name(Side.left, term.name)
+        equation.simplify_variable(Side.left, term.name)
         self.assertEqual(equation.get_value_variable(Side.left, term.name), 2 * term.value)
 
     def testGivenEquationSameVariableTwiceAtRightWithNameXWhenSimplifyNameXThenVariableIsSimplified(self):
         term = VariableBuilder().build()
         equation = EquationBuilder().right_term(term).right_term(term).left_default_constant().build()
-        equation.simplify_name(Side.right, term.name)
+        equation.simplify_variable(Side.right, term.name)
         self.assertEqual(equation.get_value_variable(Side.right, term.name), 2 * term.value)
 
     # simplify tests
