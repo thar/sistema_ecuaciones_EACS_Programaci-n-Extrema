@@ -64,7 +64,7 @@ class Expression:
         else:
             self.add_term(Variable(name, variable_value))
 
-    def get_value(self):  # tests done
+    def get_value_constant(self):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         constants = terms_counter_analyzer.get_constants()
         if 1 == len(constants):

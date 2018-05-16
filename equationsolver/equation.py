@@ -51,7 +51,7 @@ class Equation:
             raise NotSimplified
 
     def get_value_constant(self, side):
-        return self._expression[side].get_value()
+        return self._expression[side].get_value_constant()
 
     def simplify_name(self, side, name):
         self._expression[side].simplify_name(name)

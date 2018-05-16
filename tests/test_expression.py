@@ -12,24 +12,24 @@ class ExpressionTestCase(unittest.TestCase):
         constant = ConstantBuilder().build()
         expression = ExpressionBuilder().build()
         expression.add_term(constant)
-        self.assertEqual(expression.get_value(), constant.value)
+        self.assertEqual(expression.get_value_constant(), constant.value)
 
     def testGivenExpressionWithOnlyAVariableAsTermWhenGetValueThen0IsReturned(self):
         expression = ExpressionBuilder().default_variable().build()
-        self.assertEqual(expression.get_value(), 0)
+        self.assertEqual(expression.get_value_constant(), 0)
 
     def testGivenEmptyExpressionWhenGetValueThen0IsReturned(self):
         expression = ExpressionBuilder().build()
-        self.assertEqual(expression.get_value(), 0)
+        self.assertEqual(expression.get_value_constant(), 0)
 
     def testGivenExpressionWithConstantAndVariableWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
         expression = ExpressionBuilder().term(constant).default_variable().build()
-        self.assertEqual(expression.get_value(), constant.value)
+        self.assertEqual(expression.get_value_constant(), constant.value)
 
     def testGivenExpressionWithTwoConstantsWhenGetValueThenNotSimplifiedIsRaised(self):
         expression = ExpressionBuilder().default_constant().default_constant().build()
-        self.assertRaises(NotSimplified, expression.get_value)
+        self.assertRaises(NotSimplified, expression.get_value_constant)
 
     # get_value_variable tests
     def testGivenExpressionWithVariableWhenGetValueNameThenVariableValueIsReturned(self):
@@ -62,14 +62,14 @@ class ExpressionTestCase(unittest.TestCase):
     def testGivenExpressionWithVariableWhenApplyThenGetValueReturnsCorrectValue(self):
         expression = ExpressionBuilder().term(VariableBuilder().name('x').value(3.0).build()).build()
         expression.apply('x', 1.0)
-        self.assertEqual(expression.get_value(), 3.0)
+        self.assertEqual(expression.get_value_constant(), 3.0)
 
     def testGivenExpressionWithTwoVariablesWithSameNameWhenApplyAndSimplifyThenGetValueReturnsCorrectValue(self):
         expression = ExpressionBuilder().term(VariableBuilder().name('x').value(3.0).build()). \
             term(VariableBuilder().name('x').value(2.0).build()).build()
         expression.apply('x', 1.0)
         expression.simplify()
-        self.assertEqual(expression.get_value(), 5.0)
+        self.assertEqual(expression.get_value_constant(), 5.0)
 
     def testGivenExpressionWithVariableWhenApplyWrongValueThenGetValueRaisesLookupError(self):
         expression = ExpressionBuilder().term(VariableBuilder().name('x').build()).build()
@@ -166,13 +166,13 @@ class ExpressionTestCase(unittest.TestCase):
         expression2 = ExpressionBuilder().term(variable2).term(constant).build()
         expression1.add_expression(expression2)
         self.assertEqual(expression1.get_name_set(), {variable1.name, variable2.name})
-        self.assertEqual(expression1.get_value(), constant.value)
+        self.assertEqual(expression1.get_value_constant(), constant.value)
 
     def testGivenTwoExpressionsWithConstantsWhenAddExpressionThenExpressionDoesNotSimplify(
             self):
         expression = ExpressionBuilder().default_constant().build()
         expression.add_expression(expression.clon())
-        self.assertRaises(NotSimplified, expression.get_value)
+        self.assertRaises(NotSimplified, expression.get_value_constant)
 
     # multiply tests
     def testGivenExpressionWithConstantAndVariableWhenMultiplyThenGetValuesReturnsMultipliedTermsValues(self):
@@ -183,14 +183,14 @@ class ExpressionTestCase(unittest.TestCase):
         expression.multiply(multiply_value)
         constant.multiply(multiply_value)
         variable.multiply(multiply_value)
-        self.assertEqual(expression.get_value(), constant.value)
+        self.assertEqual(expression.get_value_constant(), constant.value)
         self.assertEqual(expression.get_value_variable(variable.name), variable.value)
 
     def testGivenExpressionWithVariableWhenMultiplyBy0ThenExpressionWithConstant0IsObtained(self):
         variable = VariableBuilder().build()
         expression = ExpressionBuilder().term(variable).build()
         expression.multiply(0.0)
-        self.assertEqual(expression.get_value(), 0)
+        self.assertEqual(expression.get_value_constant(), 0)
         self.assertEqual(expression.get_value_variable(variable.name), 0.0)
 
     # simplify tests
@@ -209,7 +209,7 @@ class ExpressionTestCase(unittest.TestCase):
         constant1 = ConstantBuilder().build()
         expression = ExpressionBuilder().term(constant1).term(constant1).build()
         expression.simplify()
-        self.assertTrue(expression.get_value(), 2 * constant1.value)
+        self.assertTrue(expression.get_value_constant(), 2 * constant1.value)
 
     def testGivenExpressionWithTwoConstantsWithInverseValuesWhenSimplifyThenExpressionWithConstantWithValue0IsObtained(
             self):
@@ -218,7 +218,7 @@ class ExpressionTestCase(unittest.TestCase):
         constant2.multiply(-1.0)
         expression = ExpressionBuilder().term(constant1).term(constant2).build()
         expression.simplify()
-        self.assertEqual(expression.get_value(), 0.0)
+        self.assertEqual(expression.get_value_constant(), 0.0)
 
     # simplify_name tests
     def testGivenExpressionWithOneVariableWhenSimplifyNameThenSameExpressionIsObtained(self):
@@ -248,5 +248,5 @@ class ExpressionTestCase(unittest.TestCase):
         variable2.multiply(-1.0)
         expression = ExpressionBuilder().term(variable1).term(variable2).build()
         expression.simplify_name(variable1.name)
-        self.assertEqual(expression.get_value(), 0.0)
+        self.assertEqual(expression.get_value_constant(), 0.0)
         self.assertEqual(expression.get_value_variable(variable1.name), 0.0)
