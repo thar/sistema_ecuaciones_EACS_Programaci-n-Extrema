@@ -1,15 +1,11 @@
 from copy import deepcopy
 
-from equationsolver.constant import Constant
+from equationsolver.constant_builder import ConstantBuilder
 from equationsolver.terms_counter_analyzer import TermsCounterAnalyzer
 from equationsolver.variable import Variable
 
 
 class NotSimplified(Exception):
-    pass
-
-
-class EmptyExpression(LookupError):
     pass
 
 
@@ -36,7 +32,7 @@ class Expression:
             terms = terms_counter_analyzer.get_variables()
             self._remove_terms(terms)
             if 0 == len(self._term_list):
-                self._term_list.append(Constant(0))
+                self._term_list.append(ConstantBuilder().value(0).build())
 
     def _get_added_terms_value(self, terms):
         term_value = 0.0
@@ -54,7 +50,7 @@ class Expression:
         if 0 == len(terms):
             return
         self._remove_terms(terms)
-        self.add_term(Constant(self._get_added_terms_value(terms)))
+        self.add_term(ConstantBuilder().value(self._get_added_terms_value(terms)).build())
 
     def simplify_name(self, name):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
@@ -64,13 +60,11 @@ class Expression:
         self._remove_terms(terms)
         variable_value = self._get_added_terms_value(terms)
         if 0 == variable_value:
-            self.add_term(Constant(variable_value))
+            self.add_term(ConstantBuilder().value(variable_value).build())
         else:
             self.add_term(Variable(name, variable_value))
 
     def get_value(self):  # tests done
-        if self.empty():
-            raise EmptyExpression
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         constants = terms_counter_analyzer.get_constants()
         if 1 == len(constants):
@@ -78,11 +72,9 @@ class Expression:
         elif 1 < len(constants):
             raise NotSimplified
         else:
-            raise LookupError
+            return 0
 
     def get_value_name(self, name):  # tests done
-        if self.empty():
-            raise EmptyExpression
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
         if 1 == len(terms):
@@ -90,7 +82,7 @@ class Expression:
         elif 1 < len(terms):
             raise NotSimplified
         else:
-            raise LookupError
+            return 0
 
     def get_name_set(self):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
@@ -102,10 +94,12 @@ class Expression:
     def apply(self, name, value):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_variables_with_name(name)
+        if len(terms) == 0:
+            raise LookupError
         self._remove_terms(terms)
         for term in terms:
             term.multiply(value)
-            self.add_term(Constant(term.value))
+            self.add_term(ConstantBuilder().value(term.value).build())
 
     def equal(self, expression):  # tests done
         for term1 in self._term_list:

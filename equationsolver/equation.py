@@ -46,7 +46,7 @@ class Equation:
         if 1 == len(value):
             return value.values()[0]
         elif 0 == len(value):
-            raise LookupError
+            return 0
         else:
             raise NotSimplified
 
@@ -86,6 +86,7 @@ class Equation:
             Side.left: self._expression[Side.right],
             Side.right: self._expression[Side.left]
         }
+        self._expression = new_expression
 
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])

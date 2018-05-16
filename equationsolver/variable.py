@@ -1,6 +1,8 @@
 from equationsolver.term import Term
 from copy import deepcopy
 
+from equationsolver.term_equality_analyzer import TermEqualityAnalyzer
+
 
 class Variable(Term):
     def __init__(self, name, value):
@@ -22,6 +24,10 @@ class Variable(Term):
 
     def dispatch(self, term_visitor):
         term_visitor.visit_variable(self)
+
+    def equal(self, other):
+        term_equality_analyzer = TermEqualityAnalyzer(self, other)
+        return term_equality_analyzer.is_equal()
 
     def __str__(self):
         return str(self.value) + self.name

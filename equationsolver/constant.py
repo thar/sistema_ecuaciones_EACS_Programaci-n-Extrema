@@ -1,6 +1,8 @@
 from equationsolver.term import Term
 from copy import deepcopy
 
+from equationsolver.term_equality_analyzer import TermEqualityAnalyzer
+
 
 class Constant(Term):
     def __init__(self, value):
@@ -11,6 +13,10 @@ class Constant(Term):
 
     def dispatch(self, term_visitor):
         term_visitor.visit_constant(self)
+
+    def equal(self, other):
+        term_equality_analyzer = TermEqualityAnalyzer(self, other)
+        return term_equality_analyzer.is_equal()
 
     def __str__(self):
         return str(self.value)

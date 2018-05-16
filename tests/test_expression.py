@@ -1,21 +1,12 @@
 import unittest
 
 from equationsolver.constant_builder import ConstantBuilder
-from equationsolver.expression import NotSimplified, EmptyExpression
+from equationsolver.expression import NotSimplified
 from equationsolver.expression_builder import ExpressionBuilder
 from equationsolver.variable_builder import VariableBuilder
 
 
 class ExpressionTestCase(unittest.TestCase):
-    # empty tests
-    def testGivenEmptyExpressionWhenEmptyThenReturnsTrue(self):
-        expression = ExpressionBuilder().build()
-        self.assertTrue(expression.empty())
-
-    def testGivenNotEmptyExpressionWhenEmptyThenReturnsFalse(self):
-        expression = ExpressionBuilder().default_constant().build()
-        self.assertFalse(expression.empty())
-
     # get_value tests
     def testGivenExpressionWithOnlyAConstantAsTermWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
@@ -23,13 +14,13 @@ class ExpressionTestCase(unittest.TestCase):
         expression.add_term(constant)
         self.assertEqual(expression.get_value(), constant.value)
 
-    def testGivenExpressionWithOnlyAVariableAsTermWhenGetValueThenLookupErrorIsRaised(self):
+    def testGivenExpressionWithOnlyAVariableAsTermWhenGetValueThen0IsReturned(self):
         expression = ExpressionBuilder().default_variable().build()
-        self.assertRaises(LookupError, expression.get_value)
+        self.assertEqual(expression.get_value(), 0)
 
-    def testGivenEmptyExpressionWhenGetValueThenEmptyExpressionIsRaised(self):
+    def testGivenEmptyExpressionWhenGetValueThen0IsReturned(self):
         expression = ExpressionBuilder().build()
-        self.assertRaises(EmptyExpression, expression.get_value)
+        self.assertEqual(expression.get_value(), 0)
 
     def testGivenExpressionWithConstantAndVariableWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
@@ -61,11 +52,11 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(VariableBuilder().name('y').build()).term(variable).build()
         self.assertEqual(expression.get_value_name('x'), variable.value)
 
-    def testGivenExpressionWithVariablesWithSpecificNamesWhenGetValueNameWithOtherVariableNameThenLookupErrorIsRaised(
+    def testGivenExpressionWithVariablesWithSpecificNamesWhenGetValueNameWithOtherVariableNameThen0IsReturned(
             self):
         expression = ExpressionBuilder().term(VariableBuilder().name('y').build()).term(
             VariableBuilder().name('z').build()).default_constant().build()
-        self.assertRaises(LookupError, expression.get_value_name, 'x')
+        self.assertEqual(expression.get_value_name('x'), 0)
 
     # apply tests
     def testGivenExpressionWithVariableWhenApplyThenGetValueReturnsCorrectValue(self):
@@ -82,8 +73,7 @@ class ExpressionTestCase(unittest.TestCase):
 
     def testGivenExpressionWithVariableWhenApplyWrongValueThenGetValueRaisesLookupError(self):
         expression = ExpressionBuilder().term(VariableBuilder().name('x').build()).build()
-        expression.apply('y', 1.0)
-        self.assertRaises(LookupError, expression.get_value)
+        self.assertRaises(LookupError, expression.apply, 'y', 1.0)
 
     # has_name tests
     def testGivenEmptyExpressionWhenHasNameThenReturnsFalse(self):
@@ -201,7 +191,7 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(variable).build()
         expression.multiply(0.0)
         self.assertEqual(expression.get_value(), 0)
-        self.assertRaises(LookupError, expression.get_value_name, variable.name)
+        self.assertEqual(expression.get_value_name(variable.name), 0.0)
 
     # simplify tests
     def testGivenExpressionWithOneConstantWhenSimplifyThenSameExpressionIsObtained(self):
@@ -259,4 +249,4 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(variable1).term(variable2).build()
         expression.simplify_name(variable1.name)
         self.assertEqual(expression.get_value(), 0.0)
-        self.assertRaises(LookupError, expression.get_value_name, variable1.name)
+        self.assertEqual(expression.get_value_name(variable1.name), 0.0)

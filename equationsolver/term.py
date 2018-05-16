@@ -1,6 +1,3 @@
-from equationsolver.term_equality_analyzer import TermEqualityAnalyzer
-
-
 class Term:
     def __init__(self, value):
         self._value = value
@@ -19,8 +16,7 @@ class Term:
         return False
 
     def equal(self, other):
-        term_equality_analyzer = TermEqualityAnalyzer(self, other)
-        return term_equality_analyzer.is_equal()
+        raise NotImplemented
 
     def clon(self):
         raise NotImplemented

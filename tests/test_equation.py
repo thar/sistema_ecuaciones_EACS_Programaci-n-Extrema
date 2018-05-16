@@ -3,7 +3,7 @@ import unittest
 from equationsolver.constant_builder import ConstantBuilder
 from equationsolver.equation import Side
 from equationsolver.equation_builder import EquationBuilder
-from equationsolver.expression import EmptyExpression, NotSimplified
+from equationsolver.expression import NotSimplified
 from equationsolver.variable_builder import VariableBuilder
 
 
@@ -33,19 +33,17 @@ class EquationTestCase(unittest.TestCase):
         self.assertEqual(equation.get_value_side(Side.right), term.value)
 
     # add_side tests
-    def testGivenEmptyEquationWhenAddConstantSideLeftThenItIsAddedInLeftSides(self):
+    def testGivenEmptyEquationWhenAddConstantSideLeftThenItIsAddedInLeftSide(self):
         equation = EquationBuilder().build()
-        term = ConstantBuilder().build()
+        term = ConstantBuilder().value(1.0).build()
         equation.add_side(Side.left, term)
         self.assertEqual(equation.get_value_side(Side.left), term.value)
-        self.assertRaises(EmptyExpression, equation.get_value_side, Side.right)
 
-    def testGivenEmptyEquationWhenAddConstantSideRightThenItIsAddedInRightSides(self):
+    def testGivenEmptyEquationWhenAddConstantSideRightThenItIsAddedInRightSide(self):
         equation = EquationBuilder().build()
-        term = ConstantBuilder().build()
+        term = ConstantBuilder().value(1.0).build()
         equation.add_side(Side.right, term)
         self.assertEqual(equation.get_value_side(Side.right), term.value)
-        self.assertRaises(EmptyExpression, equation.get_value_side, Side.left)
 
     # add_equation tests
     def testGivenEmptyEquationWhenAddEquationThenEquationIsEqualToAddedEquation(self):
@@ -72,14 +70,14 @@ class EquationTestCase(unittest.TestCase):
     def testGivenDefaultEquationWhenMultiplyBy0ThenValue0IsObtainedInBothTerms(self):
         equation = EquationBuilder.x_equals_1()
         equation.multiply(0.0)
-        self.assertRaises(LookupError, equation.get_value, 'x')
+        self.assertEqual(equation.get_value('x'), 0.0)
         self.assertEqual(equation.get_value_side(Side.left), 0.0)
         self.assertEqual(equation.get_value_side(Side.right), 0.0)
 
     # get_value tests
-    def testGivenEmptyEquationWhenGetValueThenRaisesLookupError(self):
+    def testGivenEmptyEquationWhenGetValueThen0IsReturned(self):
         equation = EquationBuilder().build()
-        self.assertRaises(LookupError, equation.get_value, 'x')
+        self.assertEqual(equation.get_value('x'), 0.0)
 
     def testGivenEquationWithOneVariableAtLeftWhenGetValueThenVariableValueIsReturned(self):
         variable = VariableBuilder().build()
@@ -108,10 +106,10 @@ class EquationTestCase(unittest.TestCase):
         self.assertRaises(NotSimplified, equation.get_value, variable.name)
 
     # get_value_side tests
-    def testGivenEmptyEquationWhenGetValueSideThenRaisesEmptyExpression(self):
+    def testGivenEmptyEquationWhenGetValueSideThenReturns0(self):
         equation = EquationBuilder().build()
-        self.assertRaises(EmptyExpression, equation.get_value_side, Side.left)
-        self.assertRaises(EmptyExpression, equation.get_value_side, Side.right)
+        self.assertEqual(equation.get_value_side(Side.left), 0)
+        self.assertEqual(equation.get_value_side(Side.right), 0)
 
     def testGivenEquationWithOneConstantAtLeftWhenGetValueThenConstantValueIsReturned(self):
         constant = ConstantBuilder().build()
@@ -134,18 +132,6 @@ class EquationTestCase(unittest.TestCase):
         self.assertRaises(NotSimplified, equation.get_value_side, Side.right)
 
     # simplify_name tests
-    @unittest.skip("Expression is not raising exceptions on simplify_name")
-    def testGivenEmptyEquationWhenSimplifyNameThenEmptyExpressionIsRaised(self):
-        equation = EquationBuilder().build()
-        self.assertRaises(EmptyExpression, equation.simplify_name, Side.left, 'x')
-        self.assertRaises(EmptyExpression, equation.simplify_name, Side.right, 'x')
-
-    @unittest.skip("Expression is not raising exceptions on simplify")
-    def testGivenEquationWithoutVariableWithNameXWhenSimplifyNameXThenLookupErrorIsRaised(self):
-        equation = EquationBuilder.y_equals_1()
-        self.assertRaises(LookupError, equation.simplify_name, Side.left, 'x')
-        self.assertRaises(LookupError, equation.simplify_name, Side.right, 'x')
-
     def testGivenEquationSameVariableTwiceAtLeftWithNameXWhenSimplifyNameXThenVariableIsSimplified(self):
         term = VariableBuilder().build()
         equation = EquationBuilder().left_term(term).left_term(term).right_default_constant().build()
@@ -159,18 +145,6 @@ class EquationTestCase(unittest.TestCase):
         self.assertEqual(equation.get_value(term.name), 2 * term.value)
 
     # simplify tests
-    @unittest.skip("Expression is not raising exceptions on simplify_name")
-    def testGivenEmptyEquationWhenSimplifyThenEmptyExpressionIsRaised(self):
-        equation = EquationBuilder().build()
-        self.assertRaises(EmptyExpression, equation.simplify, Side.left)
-        self.assertRaises(EmptyExpression, equation.simplify, Side.right)
-
-    @unittest.skip("Expression is not raising exceptions on simplify")
-    def testGivenEquationWithoutConstantWhenSimplifyThenLookupErrorIsRaised(self):
-        equation = EquationBuilder().left_default_variable().right_default_variable().build()
-        self.assertRaises(LookupError, equation.simplify, Side.left)
-        self.assertRaises(LookupError, equation.simplify, Side.right)
-
     def testGivenEquationSameConstantTwiceAtLeftWhenSimplifyThenConstantIsSimplified(self):
         term = ConstantBuilder().build()
         equation = EquationBuilder().left_term(term).left_term(term).build()
@@ -243,4 +217,6 @@ class EquationTestCase(unittest.TestCase):
 
     # invert tests
     def testGivenXEqualsOneEquationWhenInvertThenEquationOneEqualsXIsReturned(self):
-        self.assertTrue(EquationBuilder.x_equals_1().equal(EquationBuilder.one_equals_x()))
+        eq = EquationBuilder.x_equals_1()
+        eq.invert()
+        self.assertEqual(eq.get_value_side(Side.left), 1.0)
