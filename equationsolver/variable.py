@@ -30,4 +30,5 @@ class Variable(Term):
         return term_equality_analyzer.is_equal()
 
     def __str__(self):
-        return str(self.value) + self.name
+        sign = '+' if self.value >= 0 else ''
+        return sign + str(self.value) + self.name

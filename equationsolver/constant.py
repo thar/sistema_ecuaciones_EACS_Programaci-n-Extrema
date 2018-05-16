@@ -19,4 +19,5 @@ class Constant(Term):
         return term_equality_analyzer.is_equal()
 
     def __str__(self):
-        return str(self.value)
+        sign = '+' if self.value >= 0 else ''
+        return sign + str(self.value)
