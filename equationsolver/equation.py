@@ -47,8 +47,8 @@ class Equation:
     def simplify_variable(self, side, name):
         self._expression[side].simplify_variable(name)
 
-    def simplify(self, side):
-        self._expression[side].simplify()
+    def simplify_constant(self, side):
+        self._expression[side].simplify_constant()
 
     def get_name_set(self):
         name_set = set()

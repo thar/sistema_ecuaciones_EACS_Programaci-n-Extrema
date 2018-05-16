@@ -143,13 +143,13 @@ class EquationTestCase(unittest.TestCase):
     def testGivenEquationSameConstantTwiceAtLeftWhenSimplifyThenConstantIsSimplified(self):
         term = ConstantBuilder().build()
         equation = EquationBuilder().left_term(term).left_term(term).build()
-        equation.simplify(Side.left)
+        equation.simplify_constant(Side.left)
         self.assertEqual(equation.get_value_constant(Side.left), 2 * term.value)
 
     def testGivenEquationSameConstantTwiceAtRightWhenSimplifyThenConstantIsSimplified(self):
         term = ConstantBuilder().build()
         equation = EquationBuilder().right_term(term).right_term(term).build()
-        equation.simplify(Side.right)
+        equation.simplify_constant(Side.right)
         self.assertEqual(equation.get_value_constant(Side.right), 2 * term.value)
 
     # get_name_set tests

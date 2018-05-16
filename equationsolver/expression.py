@@ -44,7 +44,7 @@ class Expression:
         for term in terms:
             self._term_list.remove(term)
 
-    def simplify(self):  # tests done
+    def simplify_constant(self):  # tests done
         terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
         terms = terms_counter_analyzer.get_constants()
         if 0 == len(terms):

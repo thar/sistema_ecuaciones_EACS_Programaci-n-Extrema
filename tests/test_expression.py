@@ -68,7 +68,7 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(VariableBuilder().name('x').value(3.0).build()). \
             term(VariableBuilder().name('x').value(2.0).build()).build()
         expression.apply('x', 1.0)
-        expression.simplify()
+        expression.simplify_constant()
         self.assertEqual(expression.get_value_constant(), 5.0)
 
     def testGivenExpressionWithVariableWhenApplyWrongValueThenGetValueRaisesLookupError(self):
@@ -197,18 +197,18 @@ class ExpressionTestCase(unittest.TestCase):
     def testGivenExpressionWithOneConstantWhenSimplifyThenSameExpressionIsObtained(self):
         expression = ExpressionBuilder().default_constant().build()
         expression2 = expression.clon()
-        expression.simplify()
+        expression.simplify_constant()
         self.assertTrue(expression.equal(expression2))
 
     def testGivenEmpyExpressionWhenSimplifyThenEmptyExpressionIsObtained(self):
         expression = ExpressionBuilder().build()
-        expression.simplify()
+        expression.simplify_constant()
         self.assertTrue(expression.empty())
 
     def testGivenExpressionWithTwoConstantsWhenSimplifyThenExpressionWithOneConstantWithCorrectValueIsObtained(self):
         constant1 = ConstantBuilder().build()
         expression = ExpressionBuilder().term(constant1).term(constant1).build()
-        expression.simplify()
+        expression.simplify_constant()
         self.assertTrue(expression.get_value_constant(), 2 * constant1.value)
 
     def testGivenExpressionWithTwoConstantsWithInverseValuesWhenSimplifyThenExpressionWithConstantWithValue0IsObtained(
@@ -217,7 +217,7 @@ class ExpressionTestCase(unittest.TestCase):
         constant2 = constant1.clon()
         constant2.multiply(-1.0)
         expression = ExpressionBuilder().term(constant1).term(constant2).build()
-        expression.simplify()
+        expression.simplify_constant()
         self.assertEqual(expression.get_value_constant(), 0.0)
 
     # simplify_name tests
