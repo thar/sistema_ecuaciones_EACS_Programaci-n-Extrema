@@ -1,4 +1,5 @@
 from equationsolver.equation import Side
+from equationsolver.operations.equation_list_simplify import EquationListSimplify
 from equationsolver.solution_method import SolutionMethod
 
 
@@ -11,7 +12,7 @@ class ReductionMethod(SolutionMethod):
         self._equation_system_to_recurse = None
 
     def resolve(self):
-        self._equation_system.simplify()
+        self._equation_system.apply_operation(EquationListSimplify())
         self._equation_system.pop_solution_equations()
         name_set = self._equation_system.get_name_set()
         if len(name_set) == 0:
