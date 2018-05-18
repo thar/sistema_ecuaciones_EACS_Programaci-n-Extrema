@@ -31,7 +31,7 @@ class ReductionMethod(SolutionMethod):
         self._compute_solution()
 
     def _compute_solution(self):
-        ReductionMethod._move_constant_to_right_side(self._equation_to_resolve)
+        self._equation_to_resolve.move_constant_to_side(Side.right)
         self._equation_to_resolve.move_variable_to_side(self._variable_to_reduce, Side.left)
         self._equation_to_resolve.simplify()
         variable_value = self._equation_to_resolve.get_value_variable(Side.left, self._variable_to_reduce)
@@ -70,12 +70,6 @@ class ReductionMethod(SolutionMethod):
         for eq in self._equation_list:
             name_set.update(eq.get_name_set())
         return name_set
-
-    @staticmethod
-    def _move_constant_to_right_side(eq):
-        constant_value = eq.get_value_constant(Side.left)
-        if constant_value != 0:
-            eq.add(ConstantBuilder().value(-constant_value).build())
 
     def _get_reducible_variable_common_multiple(self):
         self._common_multiple = 1.0
