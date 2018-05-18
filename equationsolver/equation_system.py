@@ -48,6 +48,7 @@ class EquationSystem:
 
     def set_solution(self, first_name, equation):
         self._solutions[first_name] = equation
+        self.equation_system_solver.set_solution(first_name, equation)
 
     def _get_equation_list_name_set(self, equation_list):
         name_set = set()
