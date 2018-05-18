@@ -39,7 +39,7 @@ class ReductionMethod(SolutionMethod):
         self._multiply_equations_to_reach_common_multiple()
         self._store_equation_to_reduce()
         self._reduce_all_equations()
-        self._remove_zero_equal_zero_equations()
+        self._equation_system.simplify()
         new_equation_system = self._create_new_equation_system()
         reduction_method = ReductionMethod()
         reduction_method.set(new_equation_system)
@@ -84,13 +84,6 @@ class ReductionMethod(SolutionMethod):
         eq_to_reduce = self._equation_to_resolve.clon()
         eq_to_reduce.multiply(-1.0)
         self._equation_system.add_operation(eq_to_reduce)
-
-    def _remove_zero_equal_zero_equations(self):
-        new_equations = []
-        for eq in self._equation_list:
-            if not eq.equal(EquationBuilder.zero_equals_zero()):
-                new_equations.append(eq)
-        self._equation_list = new_equations
 
     def _create_new_equation_system(self):
         new_equation_system = EquationSystemBuilder().build()
