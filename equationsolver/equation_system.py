@@ -30,7 +30,7 @@ class EquationSystem:
             raise NotSolved
         return self._solutions[name]
 
-    def _simplify_equations(self):
+    def simplify(self):
         for eq in self._equation_list:
             eq.simplify()
 

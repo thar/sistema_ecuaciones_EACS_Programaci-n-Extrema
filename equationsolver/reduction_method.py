@@ -16,14 +16,14 @@ class ReductionMethod(SolutionMethod):
 
     def resolve(self):
         self._grab_needed_equations()
-        ReductionMethod._simplify_equations(self._equation_list)
+        self._equation_system.simplify()
         self._fix_already_solved_equations()
         name_set = self._get_name_set()
         if len(name_set) == 0:
             return 
         self._variable_to_reduce = name_set.pop()
         self._move_reducible_variable_to_left_side_in_all_equations(self._equation_list, self._variable_to_reduce)
-        ReductionMethod._simplify_equations(self._equation_list)
+        self._equation_system.simplify()
         if len(name_set) > 0:
             self._resolve_recursive(name_set)
         else:
@@ -43,7 +43,7 @@ class ReductionMethod(SolutionMethod):
         self._multiply_equations_to_reach_common_multiple()
         self._store_equation_to_reduce()
         self._reduce_all_equations()
-        ReductionMethod._simplify_equations(self._equation_list)
+        self._equation_system.simplify()
         self._remove_zero_equal_zero_equations()
         new_equation_system = self._create_new_equation_system()
         reduction_method = ReductionMethod()
@@ -70,11 +70,6 @@ class ReductionMethod(SolutionMethod):
         for eq in self._equation_list:
             name_set.update(eq.get_name_set())
         return name_set
-
-    @staticmethod
-    def _simplify_equations(equations):
-        for eq in equations:
-            ReductionMethod._simplify_equation(eq)
 
     @staticmethod
     def _simplify_equation(eq):
