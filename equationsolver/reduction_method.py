@@ -39,7 +39,6 @@ class ReductionMethod(SolutionMethod):
         self._multiply_equations_to_reach_common_multiple()
         self._store_equation_to_reduce()
         self._reduce_all_equations()
-        self._equation_system.simplify()
         self._remove_zero_equal_zero_equations()
         new_equation_system = self._create_new_equation_system()
         reduction_method = ReductionMethod()
