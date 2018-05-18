@@ -20,9 +20,7 @@ class EquationSystem:
         self.equation_system_solver.resolve()
 
     def resolve2(self):
-        name_set = self.get_name_set()
-        while set(self._solutions.keys()) != name_set:
-            self._solution_method.resolve()
+        self._solution_method.resolve()
 
     def get_name_set(self):
         return self._get_equation_list_name_set(self._equation_list)
