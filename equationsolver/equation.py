@@ -101,5 +101,8 @@ class Equation:
         if constant_value != 0:
             self.add(ConstantBuilder().value(-constant_value).build())
 
+    def is_solution_equation(self):
+        return len(self.get_name_set()) == 1
+
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])

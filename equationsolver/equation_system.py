@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class NotSolved(Exception):
     pass
 
@@ -41,6 +44,25 @@ class EquationSystem:
     def move_constant_to_side(self, side):
         for eq in self._equation_list:
             eq.move_constant_to_side(side)
+
+    def get_equation_with_name(self, name):
+        for eq in self._equation_list:
+            if name in eq.get_name_set():
+                return eq
+
+    def pop_solution_equations(self):
+        solution_equations = {}
+        temporal_equations = []
+        for eq in self._equation_list:
+            if eq.is_solution_equation():
+                solution_equations[eq.get_name_set().pop()] = eq
+            else:
+                temporal_equations.append(eq)
+        self._equation_list = temporal_equations
+        return solution_equations
+
+    def clon(self):
+        return deepcopy(self)
 
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)
