@@ -19,7 +19,6 @@ class ReductionMethodTestCase(unittest.TestCase):
         eqs.add(b)
         reduction_method = ReductionMethod()
         equation_system_solver = EquationSystemSolver(eqs, reduction_method)
-        eqs.set_equation_system_solver(equation_system_solver)
         equation_system_solver.resolve()
         self.assertTrue(equation_system_solver.get_solution('x').equal(EquationBuilder.x_equals_1()))
         self.assertTrue(equation_system_solver.get_solution('y').equal(EquationBuilder.y_equals_1()))
