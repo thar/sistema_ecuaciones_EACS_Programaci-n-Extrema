@@ -20,7 +20,7 @@ class ReductionMethod(SolutionMethod):
         self._grab_needed_equations()
         name_set = self._equation_system.get_name_set()
         if len(name_set) == 0:
-            return 
+            return
         self._variable_to_reduce = name_set.pop()
         self._equation_system.move_variable_to_side(self._variable_to_reduce, Side.left)
         self._equation_system.simplify()
@@ -71,16 +71,14 @@ class ReductionMethod(SolutionMethod):
         for i in range(len(reducible_variable_values)):
             value = reducible_variable_values[i]
             if value != 0:
-                multiply_values.append(self._common_multiple/value)
+                multiply_values.append(self._common_multiple / value)
             else:
                 multiply_values.append(1.0)
         self._equation_system.multiply_by_list(multiply_values)
 
     def _store_equation_to_reduce(self):
-        for eq in self._equation_list:
-            if self._variable_to_reduce in eq.get_name_set():
-                self._equation_to_resolve = eq.clon()
-                return
+        self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
+            {self._variable_to_reduce}).clon()
 
     def _reduce_all_equations(self):
         eq_to_reduce = self._equation_to_resolve.clon()
@@ -100,4 +98,3 @@ class ReductionMethod(SolutionMethod):
         for eq in self._equation_list:
             new_equation_system.add(eq.clon())
         return new_equation_system
-
