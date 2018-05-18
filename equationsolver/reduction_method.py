@@ -22,7 +22,8 @@ class ReductionMethod(SolutionMethod):
         if len(name_set) > 0:
             self._resolve_recursive(name_set)
         else:
-            self._store_equation_to_reduce()
+            self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
+                {self._variable_to_reduce}).clon()
         self._compute_solution()
 
     def _compute_solution(self):
@@ -50,7 +51,8 @@ class ReductionMethod(SolutionMethod):
 
     def _get_reducible_variable_common_multiple(self):
         self._equation_system_to_recurse.normalize()
-        reducible_variable_values = self._equation_system_to_recurse.get_variable_name_values(Side.left, self._variable_to_reduce)
+        reducible_variable_values = self._equation_system_to_recurse.get_variable_name_values(Side.left,
+                                                                                              self._variable_to_reduce)
         self._common_multiple = 1.0
         for value in reducible_variable_values:
             if value != 0:
@@ -59,7 +61,9 @@ class ReductionMethod(SolutionMethod):
 
     def _multiply_equations_to_reach_common_multiple(self):
         self._equation_system.normalize()
-        reducible_variable_values = self._equation_system.get_variable_name_values(Side.left, self._variable_to_reduce)
+        self._equation_system_to_recurse.normalize()
+        reducible_variable_values = self._equation_system_to_recurse.get_variable_name_values(Side.left,
+                                                                                              self._variable_to_reduce)
         multiply_values = []
         for i in range(len(reducible_variable_values)):
             value = reducible_variable_values[i]
@@ -68,9 +72,10 @@ class ReductionMethod(SolutionMethod):
             else:
                 multiply_values.append(1.0)
         self._equation_system.multiply_by_list(multiply_values)
+        self._equation_system_to_recurse.multiply_by_list(multiply_values)
 
     def _store_equation_to_reduce(self):
-        self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
+        self._equation_to_resolve = self._equation_system_to_recurse.get_equation_that_contains_name_set(
             {self._variable_to_reduce}).clon()
 
     def _reduce_all_equations(self):
