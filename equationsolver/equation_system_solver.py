@@ -4,4 +4,4 @@ class EquationSystemSolver:
         self._solution_method = solution_method
 
     def resolve(self):
-        pass
+        self._equation_system.resolve2()
