@@ -18,7 +18,6 @@ class ReductionMethod(SolutionMethod):
         self._equation_system.simplify()
         self._equation_system.pop_solution_equations()
         self._grab_needed_equations()
-        self._fix_already_solved_equations()
         name_set = self._get_name_set()
         if len(name_set) == 0:
             return 
@@ -104,23 +103,4 @@ class ReductionMethod(SolutionMethod):
         for eq in self._equation_list:
             new_equation_system.add(eq.clon())
         return new_equation_system
-
-    def _fix_already_solved_equations(self):
-        temp_equations = []
-        solved_variables = {}
-        for eq in self._equation_list:
-            eq_name_set = eq.get_name_set()
-            if len(eq_name_set) == 1:
-                self._variable_to_reduce = eq_name_set.pop()
-                self._equation_to_resolve = eq
-                self._compute_solution()
-                solved_variables[self._variable_to_reduce] = self._equation_to_resolve.get_value_constant(Side.right)
-            else:
-                temp_equations.append(eq)
-        self._equation_list = temp_equations
-        for solved_variable, solved_variable_value in solved_variables.iteritems():
-            for eq in self._equation_list:
-                eq.apply(solved_variable, solved_variable_value)
-        if len(solved_variables) != 0:
-            self._fix_already_solved_equations()
 
