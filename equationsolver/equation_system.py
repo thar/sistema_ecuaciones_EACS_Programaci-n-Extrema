@@ -17,16 +17,13 @@ class EquationSystem:
         self._equation_list.append(equation.clon())
 
     def get_name_set(self):
-        return self._get_equation_list_name_set(self._equation_list)
+        name_set = set()
+        for equation in self._equation_list:
+            name_set.update(equation.get_name_set())
+        return name_set
 
     def set_solution(self, name, equation):
         self._solutions[name] = equation
-
-    def _get_equation_list_name_set(self, equation_list):
-        name_set = set()
-        for equation in equation_list:
-            name_set.update(equation.get_name_set())
-        return name_set
 
     def get_solution(self, name):
         if name not in self._solutions:
