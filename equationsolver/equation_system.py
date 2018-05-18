@@ -33,6 +33,10 @@ class EquationSystem:
     def get_solutions_name_set(self):
         return set(self._solutions.keys())
 
+    def apply_operation(self, operation):
+        operation.set_equation_list(self._equation_list)
+        operation.apply()
+
     def simplify(self):
         for eq in self._equation_list:
             eq.simplify()
