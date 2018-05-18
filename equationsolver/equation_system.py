@@ -24,12 +24,6 @@ class EquationSystem:
     def get_last(self):
         return self._equation_list[-1]
 
-    def copy_before_before(self, before):
-        self._equation_list = self._equation_list[:before] + self.__get(before).clon() + self._equation_list[before:]
-
-    def copy_before(self):
-        self.add(self.get_last())
-
     def set_solution(self, name, equation):
         self._solutions[name] = equation
 
