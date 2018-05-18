@@ -22,7 +22,7 @@ class ReductionMethod(SolutionMethod):
         if len(name_set) == 0:
             return 
         self._variable_to_reduce = name_set.pop()
-        self._move_reducible_variable_to_left_side_in_all_equations(self._equation_list, self._variable_to_reduce)
+        self._equation_system.move_variable_to_side(self._variable_to_reduce, Side.left)
         self._equation_system.simplify()
         if len(name_set) > 0:
             self._resolve_recursive(name_set)
@@ -32,7 +32,7 @@ class ReductionMethod(SolutionMethod):
 
     def _compute_solution(self):
         ReductionMethod._move_constant_to_right_side(self._equation_to_resolve)
-        ReductionMethod._move_reducible_variable_to_left_side(self._equation_to_resolve, self._variable_to_reduce)
+        self._equation_to_resolve.move_variable_to_side(self._variable_to_reduce, Side.left)
         self._equation_to_resolve.simplify()
         variable_value = self._equation_to_resolve.get_value_variable(Side.left, self._variable_to_reduce)
         self._equation_to_resolve.multiply(1.0/variable_value)
@@ -70,17 +70,6 @@ class ReductionMethod(SolutionMethod):
         for eq in self._equation_list:
             name_set.update(eq.get_name_set())
         return name_set
-
-    @staticmethod
-    def _move_reducible_variable_to_left_side_in_all_equations(equation_list, variable_name):
-        for eq in equation_list:
-            ReductionMethod._move_reducible_variable_to_left_side(eq, variable_name)
-
-    @staticmethod
-    def _move_reducible_variable_to_left_side(eq, variable_name):
-        variable_value = eq.get_value_variable(Side.right, variable_name)
-        if variable_value != 0:
-            eq.add(VariableBuilder().name(variable_name).value(-variable_value).build())
 
     @staticmethod
     def _move_constant_to_right_side(eq):
