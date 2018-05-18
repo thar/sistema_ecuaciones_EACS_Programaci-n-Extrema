@@ -5,8 +5,6 @@ class NotSolved(Exception):
 class EquationSystem:
     def __init__(self):
         self._equation_list = []
-        self._solution_method = None
-        self.equation_system_solver = None
         self._solutions = {}
 
     def add(self, equation):
@@ -15,14 +13,8 @@ class EquationSystem:
     def get_name_set(self):
         return self._get_equation_list_name_set(self._equation_list)
 
-    def __get(self, index):
-        return self._equation_list[index]
-
     def get_last_before(self, before):
         return self._equation_list[before - 1]
-
-    def get_last(self):
-        return self._equation_list[-1]
 
     def set_solution(self, name, equation):
         self._solutions[name] = equation
@@ -37,9 +29,6 @@ class EquationSystem:
         if name not in self._solutions:
             raise NotSolved
         return self._solutions[name]
-
-    def equal(self):
-        return False
 
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)
