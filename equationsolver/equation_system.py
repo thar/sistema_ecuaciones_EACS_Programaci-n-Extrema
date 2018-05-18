@@ -1,3 +1,6 @@
+from equationsolver.equation_system_solver import EquationSystemSolver
+
+
 class NotSolved(Exception):
     pass
 
@@ -16,6 +19,7 @@ class EquationSystem:
         self._solution_method.set(self)
 
     def resolve(self):
+        equation_system_solver = EquationSystemSolver(self, self._solution_method)
         name_set = self.get_name_set()
         while set(self._solutions.keys()) != name_set:
             self._solution_method.resolve()

@@ -1,3 +1,4 @@
 class EquationSystemSolver:
-    def __init__(self):
-        pass
+    def __init__(self, equation_system, solution_method):
+        self._equation_system = equation_system
+        self._solution_method = solution_method
