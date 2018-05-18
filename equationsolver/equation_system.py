@@ -38,5 +38,9 @@ class EquationSystem:
         for eq in self._equation_list:
             eq.move_variable_to_side(variable_name, side)
 
+    def move_constant_to_side(self, side):
+        for eq in self._equation_list:
+            eq.move_constant_to_side(side)
+
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)
