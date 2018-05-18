@@ -1,7 +1,3 @@
-class NotSolved(Exception):
-    pass
-
-
 class EquationSystemSolver:
     def __init__(self, equation_system, solution_method):
         self._equation_system = equation_system
@@ -11,10 +7,5 @@ class EquationSystemSolver:
     def resolve(self):
         self._solution_method.resolve()
 
-    def set_solution(self, name, equation):
-        self._solutions[name] = equation
-
     def get_solution(self, name):
-        if name not in self._solutions:
-            raise NotSolved
-        return self._solutions[name]
+        return self._equation_system.get_solution(name)

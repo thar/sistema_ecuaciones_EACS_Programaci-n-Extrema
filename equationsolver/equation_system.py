@@ -1,11 +1,16 @@
 from equationsolver.equation_system_solver import EquationSystemSolver
 
 
+class NotSolved(Exception):
+    pass
+
+
 class EquationSystem:
     def __init__(self):
         self._equation_list = []
         self._solution_method = None
         self.equation_system_solver = None
+        self._solutions = {}
 
     def add(self, equation):
         self._equation_list.append(equation.clon())
@@ -39,8 +44,8 @@ class EquationSystem:
     def copy_before(self):
         self.add(self.get_last())
 
-    def set_solution(self, first_name, equation):
-        self.equation_system_solver.set_solution(first_name, equation)
+    def set_solution(self, name, equation):
+        self._solutions[name] = equation
 
     def _get_equation_list_name_set(self, equation_list):
         name_set = set()
@@ -49,7 +54,9 @@ class EquationSystem:
         return name_set
 
     def get_solution(self, name):
-        return self.equation_system_solver.get_solution(name)
+        if name not in self._solutions:
+            raise NotSolved
+        return self._solutions[name]
 
     def equal(self):
         return False
