@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from equationsolver.equation import Side
+from equationsolver.equation_builder import EquationBuilder
 
 
 class NotSolved(Exception):
@@ -38,6 +39,7 @@ class EquationSystem:
     def simplify(self):
         for eq in self._equation_list:
             eq.simplify()
+        self._remove_zero_equal_zero_equations()
 
     def normalize(self):
         for eq in self._equation_list:
@@ -81,6 +83,28 @@ class EquationSystem:
 
     def clon(self):
         return deepcopy(self)
+
+    def _remove_zero_equal_zero_equations(self):
+        new_equations = []
+        for eq in self._equation_list:
+            if not eq.equal(EquationBuilder.zero_equals_zero()):
+                new_equations.append(eq)
+        self._equation_list = new_equations
+
+    def get_variable_name_values(self, side, name):
+        values = []
+        for eq in self._equation_list:
+            values.append(eq.get_value_variable(side, name))
+        return values
+
+    def multiply_by_list(self, values_list):
+        for i in range(len(values_list)):
+            self._equation_list[i].multiply(values_list[i])
+
+    def get_equation_that_contains_name_set(self, variable_name_set):
+        for eq in self._equation_list:
+            if eq.get_name_set().issuperset(variable_name_set):
+                return eq
 
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)

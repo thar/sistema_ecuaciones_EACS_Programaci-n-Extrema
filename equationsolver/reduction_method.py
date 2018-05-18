@@ -18,7 +18,7 @@ class ReductionMethod(SolutionMethod):
         self._equation_system.simplify()
         self._equation_system.pop_solution_equations()
         self._grab_needed_equations()
-        name_set = self._get_name_set()
+        name_set = self._equation_system.get_name_set()
         if len(name_set) == 0:
             return 
         self._variable_to_reduce = name_set.pop()
