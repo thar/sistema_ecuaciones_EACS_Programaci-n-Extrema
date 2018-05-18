@@ -37,7 +37,6 @@ class ReductionMethod(SolutionMethod):
         self._multiply_equations_to_reach_common_multiple()
         self._store_equation_to_reduce()
         self._reduce_all_equations()
-        self._equation_system.apply_operation(EquationListSimplify())
         self._equation_system_to_recurse.apply_operation(EquationListSimplify())
         reduction_method = ReductionMethod()
         reduction_method.set(self._equation_system_to_recurse)
