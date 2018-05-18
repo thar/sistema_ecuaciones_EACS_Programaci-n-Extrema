@@ -46,8 +46,9 @@ class ReductionMethod(SolutionMethod):
         ReductionMethod._simplify_equations(self._equation_list)
         self._remove_zero_equal_zero_equations()
         new_equation_system = self._create_new_equation_system()
-        new_equation_system.set(ReductionMethod())
-        new_equation_system.resolve()
+        reduction_method = ReductionMethod()
+        reduction_method.set(new_equation_system)
+        reduction_method.resolve()
         for variable_name in name_set:
             variable_solution_equation = new_equation_system.get_solution(variable_name)
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
