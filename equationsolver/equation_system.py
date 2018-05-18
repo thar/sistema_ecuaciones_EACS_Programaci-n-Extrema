@@ -10,6 +10,7 @@ class EquationSystem:
         self._equation_list = []
         self._solutions = {}
         self._solution_method = None
+        self.equation_system_solver = None
 
     def add(self, equation):
         self._equation_list.append(equation.clon())
@@ -17,10 +18,10 @@ class EquationSystem:
     def set(self, solution_method):
         self._solution_method = solution_method
         self._solution_method.set(self)
+        self.equation_system_solver = EquationSystemSolver(self, self._solution_method)
 
     def resolve(self):
-        equation_system_solver = EquationSystemSolver(self, self._solution_method)
-        equation_system_solver.resolve()
+        self.equation_system_solver.resolve()
 
     def resolve2(self):
         name_set = self.get_name_set()
