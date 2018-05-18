@@ -37,11 +37,6 @@ class EquationSystem:
         operation.set_equation_list(self._equation_list)
         operation.apply()
 
-    def simplify(self):
-        for eq in self._equation_list:
-            eq.simplify()
-        self._remove_zero_equal_zero_equations()
-
     def normalize(self):
         for eq in self._equation_list:
             eq.normalize()
@@ -81,13 +76,6 @@ class EquationSystem:
 
     def clon(self):
         return deepcopy(self)
-
-    def _remove_zero_equal_zero_equations(self):
-        new_equations = []
-        for eq in self._equation_list:
-            if not eq.equal(EquationBuilder.zero_equals_zero()):
-                new_equations.append(eq)
-        self._equation_list = new_equations
 
     def get_variable_name_values(self, side, name):
         values = []
