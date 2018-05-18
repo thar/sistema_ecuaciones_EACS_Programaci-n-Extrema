@@ -41,13 +41,7 @@ class ReductionMethod(SolutionMethod):
         reduction_method = ReductionMethod()
         reduction_method.set(self._equation_system_to_recurse)
         reduction_method.resolve()
-        for variable_name in self._equation_system_to_recurse.get_solutions_name_set():
-            variable_solution_equation = self._equation_system_to_recurse.get_solution(variable_name)
-            variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
-            self._equation_system.set_solution(variable_name, variable_solution_equation)
-            if variable_name in self._equation_to_resolve.get_name_set():
-                self._equation_to_resolve.apply(variable_name, variable_solution_value)
-        self._equation_to_resolve.simplify()
+        self.merge_solutions()
 
     def _get_reducible_variable_common_multiple(self):
         self._equation_system_to_recurse.normalize()
@@ -82,7 +76,7 @@ class ReductionMethod(SolutionMethod):
         self._equation_system_to_recurse.add_operation(eq_to_reduce)
 
     def merge_solutions(self):
-        for variable_name in self._equation_system_to_recurse.get_name_set():
+        for variable_name in self._equation_system_to_recurse.get_solutions_name_set():
             variable_solution_equation = self._equation_system_to_recurse.get_solution(variable_name)
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self._equation_system.set_solution(variable_name, variable_solution_equation)
