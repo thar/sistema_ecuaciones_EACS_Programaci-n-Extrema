@@ -1,6 +1,3 @@
-from equationsolver.equation_system_solver import EquationSystemSolver
-
-
 class NotSolved(Exception):
     pass
 
@@ -14,9 +11,6 @@ class EquationSystem:
 
     def add(self, equation):
         self._equation_list.append(equation.clon())
-
-    def set_equation_system_solver(self, equation_system_solver):
-        self.equation_system_solver = equation_system_solver
 
     def get_name_set(self):
         return self._get_equation_list_name_set(self._equation_list)
