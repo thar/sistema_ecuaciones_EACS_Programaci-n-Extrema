@@ -1,5 +1,6 @@
 from equationsolver.equation import Side
 from equationsolver.operations.equation_list_simplify import EquationListSimplify
+from equationsolver.operations.equation_simplify import EquationSimplify
 from equationsolver.solution_method import SolutionMethod
 
 
@@ -82,5 +83,7 @@ class ReductionMethod(SolutionMethod):
             self._equation_system.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
                 self._equation_to_resolve.apply(variable_name, variable_solution_value)
-        self._equation_to_resolve.simplify()
+        equation_simplifier = EquationSimplify()
+        equation_simplifier.set_equation(self._equation_to_resolve)
+        equation_simplifier.apply()
 
