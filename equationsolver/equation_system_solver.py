@@ -9,7 +9,7 @@ class EquationSystemSolver:
         self._solutions = {}
 
     def resolve(self):
-        self._equation_system.resolve2()
+        self._solution_method.resolve()
 
     def set_solution(self, name, equation):
         self._solutions[name] = equation
