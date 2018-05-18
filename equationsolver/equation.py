@@ -104,5 +104,11 @@ class Equation:
     def is_solution_equation(self):
         return len(self.get_name_set()) == 1
 
+    def normalize(self):
+        self.move_constant_to_side(Side.right)
+        for name in self.get_name_set():
+            self.move_variable_to_side(name, Side.left)
+        self.simplify()
+
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])

@@ -39,6 +39,10 @@ class EquationSystem:
         for eq in self._equation_list:
             eq.simplify()
 
+    def normalize(self):
+        for eq in self._equation_list:
+            eq.normalize()
+
     def move_variable_to_side(self, variable_name, side):
         for eq in self._equation_list:
             eq.move_variable_to_side(variable_name, side)
