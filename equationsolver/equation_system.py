@@ -18,14 +18,6 @@ class EquationSystem:
     def set_equation_system_solver(self, equation_system_solver):
         self.equation_system_solver = equation_system_solver
 
-    def set(self, solution_method):
-        self._solution_method = solution_method
-        self._solution_method.set(self)
-        self.equation_system_solver = EquationSystemSolver(self, self._solution_method)
-
-    def resolve(self):
-        self.equation_system_solver.resolve()
-
     def get_name_set(self):
         return self._get_equation_list_name_set(self._equation_list)
 
