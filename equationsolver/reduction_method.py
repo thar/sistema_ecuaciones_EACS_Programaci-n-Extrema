@@ -55,12 +55,6 @@ class ReductionMethod(SolutionMethod):
     def _grab_needed_equations(self):
         self._equation_list = self._equation_system.get_equation_list()
 
-    def _get_name_set(self):
-        name_set = set()
-        for eq in self._equation_list:
-            name_set.update(eq.get_name_set())
-        return name_set
-
     def _get_reducible_variable_common_multiple(self):
         self._equation_system.normalize()
         reducible_variable_values = self._equation_system.get_variable_name_values(Side.left, self._variable_to_reduce)
