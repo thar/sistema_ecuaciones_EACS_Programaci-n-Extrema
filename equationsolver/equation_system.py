@@ -20,6 +20,10 @@ class EquationSystem:
 
     def resolve(self):
         equation_system_solver = EquationSystemSolver(self, self._solution_method)
+        equation_system_solver.resolve()
+        self.resolve2()
+
+    def resolve2(self):
         name_set = self.get_name_set()
         while set(self._solutions.keys()) != name_set:
             self._solution_method.resolve()
