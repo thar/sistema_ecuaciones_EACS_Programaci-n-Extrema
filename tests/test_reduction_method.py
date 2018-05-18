@@ -18,7 +18,6 @@ class ReductionMethodTestCase(unittest.TestCase):
         eqs.add(a)
         eqs.add(b)
         reduction_method = ReductionMethod()
-        eqs.set(reduction_method)
         equation_system_solver = EquationSystemSolver(eqs, reduction_method)
         eqs.set_equation_system_solver(equation_system_solver)
         equation_system_solver.resolve()
