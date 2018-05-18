@@ -19,9 +19,6 @@ class EquationSystem:
     def get_name_set(self):
         return self._get_equation_list_name_set(self._equation_list)
 
-    def get_equation_list(self):
-        return self._equation_list
-
     def set_solution(self, name, equation):
         self._solutions[name] = equation
 
