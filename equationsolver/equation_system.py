@@ -30,5 +30,9 @@ class EquationSystem:
             raise NotSolved
         return self._solutions[name]
 
+    def _simplify_equations(self):
+        for eq in self._equation_list:
+            eq.simplify()
+
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)

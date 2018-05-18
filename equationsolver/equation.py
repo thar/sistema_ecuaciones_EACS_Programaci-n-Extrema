@@ -76,5 +76,11 @@ class Equation:
         }
         self._expression = new_expression
 
+    def simplify(self):
+        for side in Side:
+            self.simplify_constant(side)
+            for name in self.get_name_set():
+                self.simplify_variable(side, name)
+
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
