@@ -20,7 +20,7 @@ class ReductionMethod(SolutionMethod):
         self._equation_system.move_variable_to_side(self._variable_to_reduce, Side.left)
         self._equation_system.simplify()
         if len(name_set) > 0:
-            self._resolve_recursive(name_set)
+            self._resolve_recursive()
         else:
             self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
                 {self._variable_to_reduce}).clon()
@@ -30,7 +30,7 @@ class ReductionMethod(SolutionMethod):
         self._equation_to_resolve.isolate_variable(self._variable_to_reduce)
         self._equation_system.set_solution(self._variable_to_reduce, self._equation_to_resolve)
 
-    def _resolve_recursive(self, name_set):
+    def _resolve_recursive(self):
         self._equation_system_to_recurse = self._equation_system.clon()
         self._get_reducible_variable_common_multiple()
         self._multiply_equations_to_reach_common_multiple()
@@ -41,7 +41,7 @@ class ReductionMethod(SolutionMethod):
         reduction_method = ReductionMethod()
         reduction_method.set(self._equation_system_to_recurse)
         reduction_method.resolve()
-        for variable_name in name_set:
+        for variable_name in self._equation_system_to_recurse.get_solutions_name_set():
             variable_solution_equation = self._equation_system_to_recurse.get_solution(variable_name)
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self._equation_system.set_solution(variable_name, variable_solution_equation)
