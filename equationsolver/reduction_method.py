@@ -33,7 +33,7 @@ class ReductionMethod(SolutionMethod):
     def _compute_solution(self):
         ReductionMethod._move_constant_to_right_side(self._equation_to_resolve)
         ReductionMethod._move_reducible_variable_to_left_side(self._equation_to_resolve, self._variable_to_reduce)
-        ReductionMethod._simplify_equation(self._equation_to_resolve)
+        self._equation_to_resolve.simplify()
         variable_value = self._equation_to_resolve.get_value_variable(Side.left, self._variable_to_reduce)
         self._equation_to_resolve.multiply(1.0/variable_value)
         self._equation_system.set_solution(self._variable_to_reduce, self._equation_to_resolve)
@@ -55,7 +55,7 @@ class ReductionMethod(SolutionMethod):
             self._equation_system.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
                 self._equation_to_resolve.apply(variable_name, variable_solution_value)
-        ReductionMethod._simplify_equation(self._equation_to_resolve)
+        self._equation_to_resolve.simplify()
 
     def _grab_needed_equations(self):
         self._equation_list = []
@@ -70,13 +70,6 @@ class ReductionMethod(SolutionMethod):
         for eq in self._equation_list:
             name_set.update(eq.get_name_set())
         return name_set
-
-    @staticmethod
-    def _simplify_equation(eq):
-        for side in Side:
-            eq.simplify_constant(side)
-            for name in eq.get_name_set():
-                eq.simplify_variable(side, name)
 
     @staticmethod
     def _move_reducible_variable_to_left_side_in_all_equations(equation_list, variable_name):
