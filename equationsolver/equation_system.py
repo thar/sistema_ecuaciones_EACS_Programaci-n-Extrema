@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from equationsolver.equation import Side
+
 
 class NotSolved(Exception):
     pass
@@ -51,15 +53,27 @@ class EquationSystem:
                 return eq
 
     def pop_solution_equations(self):
-        solution_equations = {}
         temporal_equations = []
         for eq in self._equation_list:
             if eq.is_solution_equation():
-                solution_equations[eq.get_name_set().pop()] = eq
+                solved_variable = eq.get_name_set().pop()
+                eq.move_constant_to_side(Side.right)
+                eq.move_variable_to_side(solved_variable, Side.left)
+                eq.multiply(1.0/eq.get_value_variable(Side.left, solved_variable))
+                eq.simplify()
+                self._solutions[solved_variable] = eq
             else:
                 temporal_equations.append(eq)
         self._equation_list = temporal_equations
-        return solution_equations
+        self.apply_solutions()
+
+    def apply_solutions(self):
+        for variable_name in self._solutions.keys():
+            for eq in self._equation_list:
+                eq.apply(variable_name, self.get_solution_value(variable_name))
+
+    def get_solution_value(self, name):
+        return self._solutions[name].get_value_constant(Side.right)
 
     def clon(self):
         return deepcopy(self)

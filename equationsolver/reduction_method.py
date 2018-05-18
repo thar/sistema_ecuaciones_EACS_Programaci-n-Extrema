@@ -15,8 +15,9 @@ class ReductionMethod(SolutionMethod):
         self._equation_to_resolve = None
 
     def resolve(self):
-        self._grab_needed_equations()
         self._equation_system.simplify()
+        self._equation_system.pop_solution_equations()
+        self._grab_needed_equations()
         self._fix_already_solved_equations()
         name_set = self._get_name_set()
         if len(name_set) == 0:
