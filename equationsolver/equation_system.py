@@ -60,10 +60,7 @@ class EquationSystem:
         for eq in self._equation_list:
             if eq.is_solution_equation():
                 solved_variable = eq.get_name_set().pop()
-                eq.move_constant_to_side(Side.right)
-                eq.move_variable_to_side(solved_variable, Side.left)
-                eq.multiply(1.0/eq.get_value_variable(Side.left, solved_variable))
-                eq.simplify()
+                eq.isolate_variable(solved_variable)
                 self._solutions[solved_variable] = eq
             else:
                 temporal_equations.append(eq)

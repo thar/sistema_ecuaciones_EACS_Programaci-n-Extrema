@@ -116,6 +116,9 @@ class Equation:
         for name in self.get_name_set():
             if name != variable_name:
                 self.move_variable_to_side(name, Side.right)
+            else:
+                self.move_variable_to_side(variable_name, Side.left)
+        self.simplify()
         self.multiply(1.0/self.get_value_variable(Side.left, name))
         self.simplify()
 
