@@ -1,7 +1,6 @@
 from copy import deepcopy
 
 from equationsolver.equation import Side
-from equationsolver.equation_builder import EquationBuilder
 
 
 class NotSolved(Exception):
