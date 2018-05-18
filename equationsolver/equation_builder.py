@@ -86,5 +86,10 @@ class EquationBuilder:
         return EquationBuilder().right_term(VariableBuilder().name('x').value(1.0).build()).left_term(
             VariableBuilder().name('y').value(1.0).build()).build()
 
+    @staticmethod
+    def zero_equals_zero():
+        return EquationBuilder().left_term(ConstantBuilder().value(0.0).build()).right_term(
+            ConstantBuilder().value(0.0).build()).build()
+
     def build(self):
         return Equation(left_expression=self._left_expression, right_expression=self._right_expression)
