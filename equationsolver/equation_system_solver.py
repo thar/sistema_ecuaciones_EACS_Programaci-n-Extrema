@@ -1,4 +1,5 @@
-from equationsolver.equation_system import NotSolved
+class NotSolved(Exception):
+    pass
 
 
 class EquationSystemSolver:

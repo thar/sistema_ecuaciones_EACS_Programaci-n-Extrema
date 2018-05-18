@@ -1,10 +1,6 @@
 from equationsolver.equation_system_solver import EquationSystemSolver
 
 
-class NotSolved(Exception):
-    pass
-
-
 class EquationSystem:
     def __init__(self):
         self._equation_list = []
@@ -57,9 +53,7 @@ class EquationSystem:
         return name_set
 
     def get_solution(self, name):
-        if name not in self._solutions:
-            raise NotSolved
-        return self._solutions[name]
+        return self.equation_system_solver.get_solution(name)
 
     def equal(self):
         return False
