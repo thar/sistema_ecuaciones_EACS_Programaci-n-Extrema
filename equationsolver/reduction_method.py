@@ -62,9 +62,10 @@ class ReductionMethod(SolutionMethod):
         return name_set
 
     def _get_reducible_variable_common_multiple(self):
+        self._equation_system.normalize()
+        reducible_variable_values = self._equation_system.get_variable_name_values(Side.left, self._variable_to_reduce)
         self._common_multiple = 1.0
-        for eq in self._equation_list:
-            value = eq.get_value_variable(Side.left, self._variable_to_reduce)
+        for value in reducible_variable_values:
             if value != 0:
                 self._common_multiple *= value
         self._common_multiple = abs(self._common_multiple)
