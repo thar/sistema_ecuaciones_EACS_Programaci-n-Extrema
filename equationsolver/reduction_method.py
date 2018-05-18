@@ -37,12 +37,13 @@ class ReductionMethod(SolutionMethod):
         self._store_equation_to_reduce()
         self._reduce_all_equations()
         self._equation_system.simplify()
+        self._equation_system_to_recurse.simplify()
         new_equation_system = self._equation_system.clon()
         reduction_method = ReductionMethod()
-        reduction_method.set(new_equation_system)
+        reduction_method.set(self._equation_system_to_recurse)
         reduction_method.resolve()
         for variable_name in name_set:
-            variable_solution_equation = new_equation_system.get_solution(variable_name)
+            variable_solution_equation = self._equation_system_to_recurse.get_solution(variable_name)
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self._equation_system.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
@@ -82,3 +83,4 @@ class ReductionMethod(SolutionMethod):
         eq_to_reduce = self._equation_to_resolve.clon()
         eq_to_reduce.multiply(-1.0)
         self._equation_system.add_operation(eq_to_reduce)
+        self._equation_system_to_recurse.add_operation(eq_to_reduce)
