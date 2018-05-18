@@ -36,6 +36,9 @@ class EquationSystem:
             raise NotSolved
         return self._solutions[name]
 
+    def get_solutions_name_set(self):
+        return set(self._solutions.keys())
+
     def simplify(self):
         for eq in self._equation_list:
             eq.simplify()
