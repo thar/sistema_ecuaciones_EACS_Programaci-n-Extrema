@@ -58,12 +58,7 @@ class ReductionMethod(SolutionMethod):
         self._equation_to_resolve.simplify()
 
     def _grab_needed_equations(self):
-        self._equation_list = []
-        index = 1
-        while self._get_name_set() != self._equation_system.get_name_set() or \
-                        len(self._equation_list) < len(self._get_name_set()):
-            self._equation_list.append(self._equation_system.get_last_before(index))
-            index += 1
+        self._equation_list = self._equation_system.get_equation_list()
 
     def _get_name_set(self):
         name_set = set()
