@@ -1,6 +1,7 @@
 from copy import deepcopy
 from enum import Enum
 from equationsolver.expression_builder import ExpressionBuilder
+from equationsolver.variable_builder import VariableBuilder
 
 
 class Side(Enum):
@@ -81,6 +82,14 @@ class Equation:
             self.simplify_constant(side)
             for name in self.get_name_set():
                 self.simplify_variable(side, name)
+
+    def move_variable_to_side(self, name, side):
+        side_to_remove_from = Side.right
+        if side == Side.right:
+            side_to_remove_from = Side.left
+        variable_value = self.get_value_variable(side_to_remove_from, name)
+        if variable_value != 0:
+            self.add(VariableBuilder().name(name).value(-variable_value).build())
 
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
