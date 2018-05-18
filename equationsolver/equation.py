@@ -110,5 +110,14 @@ class Equation:
             self.move_variable_to_side(name, Side.left)
         self.simplify()
 
+    def isolate_variable(self, variable_name):
+        self.simplify()
+        self.move_constant_to_side(Side.right)
+        for name in self.get_name_set():
+            if name != variable_name:
+                self.move_variable_to_side(name, Side.right)
+        self.multiply(1.0/self.get_value_variable(Side.left, name))
+        self.simplify()
+
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])

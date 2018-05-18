@@ -31,11 +31,7 @@ class ReductionMethod(SolutionMethod):
         self._compute_solution()
 
     def _compute_solution(self):
-        self._equation_to_resolve.move_constant_to_side(Side.right)
-        self._equation_to_resolve.move_variable_to_side(self._variable_to_reduce, Side.left)
-        self._equation_to_resolve.simplify()
-        variable_value = self._equation_to_resolve.get_value_variable(Side.left, self._variable_to_reduce)
-        self._equation_to_resolve.multiply(1.0/variable_value)
+        self._equation_to_resolve.isolate_variable(self._variable_to_reduce)
         self._equation_system.set_solution(self._variable_to_reduce, self._equation_to_resolve)
 
     def _resolve_recursive(self, name_set):
