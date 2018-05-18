@@ -83,8 +83,7 @@ class ReductionMethod(SolutionMethod):
     def _reduce_all_equations(self):
         eq_to_reduce = self._equation_to_resolve.clon()
         eq_to_reduce.multiply(-1.0)
-        for eq in self._equation_list:
-            eq.add_equation(eq_to_reduce)
+        self._equation_system.add_operation(eq_to_reduce)
 
     def _remove_zero_equal_zero_equations(self):
         new_equations = []

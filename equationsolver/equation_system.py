@@ -101,6 +101,10 @@ class EquationSystem:
         for i in range(len(values_list)):
             self._equation_list[i].multiply(values_list[i])
 
+    def add_operation(self, equation):
+        for eq in self._equation_list:
+            eq.add_equation(equation)
+
     def get_equation_that_contains_name_set(self, variable_name_set):
         for eq in self._equation_list:
             if eq.get_name_set().issuperset(variable_name_set):
