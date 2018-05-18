@@ -4,7 +4,6 @@ from equationsolver.equation_system_solver import EquationSystemSolver
 class EquationSystem:
     def __init__(self):
         self._equation_list = []
-        self._solutions = {}
         self._solution_method = None
         self.equation_system_solver = None
 
@@ -41,7 +40,6 @@ class EquationSystem:
         self.add(self.get_last())
 
     def set_solution(self, first_name, equation):
-        self._solutions[first_name] = equation
         self.equation_system_solver.set_solution(first_name, equation)
 
     def _get_equation_list_name_set(self, equation_list):
