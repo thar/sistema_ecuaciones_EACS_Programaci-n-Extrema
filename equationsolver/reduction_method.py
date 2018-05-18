@@ -9,7 +9,6 @@ from equationsolver.variable_builder import VariableBuilder
 class ReductionMethod(SolutionMethod):
     def __init__(self):
         SolutionMethod.__init__(self)
-        self._equation_list = []
         self._variable_to_reduce = None
         self._common_multiple = 1.0
         self._equation_to_resolve = None
@@ -17,7 +16,6 @@ class ReductionMethod(SolutionMethod):
     def resolve(self):
         self._equation_system.simplify()
         self._equation_system.pop_solution_equations()
-        self._grab_needed_equations()
         name_set = self._equation_system.get_name_set()
         if len(name_set) == 0:
             return
@@ -51,9 +49,6 @@ class ReductionMethod(SolutionMethod):
             if variable_name in self._equation_to_resolve.get_name_set():
                 self._equation_to_resolve.apply(variable_name, variable_solution_value)
         self._equation_to_resolve.simplify()
-
-    def _grab_needed_equations(self):
-        self._equation_list = self._equation_system.get_equation_list()
 
     def _get_reducible_variable_common_multiple(self):
         self._equation_system.normalize()
