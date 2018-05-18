@@ -65,9 +65,16 @@ class ReductionMethod(SolutionMethod):
         self._common_multiple = abs(self._common_multiple)
 
     def _multiply_equations_to_reach_common_multiple(self):
-        for eq in self._equation_list:
-            if self._variable_to_reduce in eq.get_name_set():
-                eq.multiply(self._common_multiple/eq.get_value_variable(Side.left, self._variable_to_reduce))
+        self._equation_system.normalize()
+        reducible_variable_values = self._equation_system.get_variable_name_values(Side.left, self._variable_to_reduce)
+        multiply_values = []
+        for i in range(len(reducible_variable_values)):
+            value = reducible_variable_values[i]
+            if value != 0:
+                multiply_values.append(self._common_multiple/value)
+            else:
+                multiply_values.append(1.0)
+        self._equation_system.multiply_by_list(multiply_values)
 
     def _store_equation_to_reduce(self):
         for eq in self._equation_list:
