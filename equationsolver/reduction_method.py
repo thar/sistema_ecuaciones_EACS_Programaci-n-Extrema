@@ -1,7 +1,6 @@
-from equationsolver.equation import Side
+from equationsolver.equation import Side, Equation
 from equationsolver.operations.equation_list_equation_sum import EquationListEquationSum
 from equationsolver.operations.equation_list_simplify import EquationListSimplify
-from equationsolver.operations.equation_simplify import EquationSimplify
 from equationsolver.solution_method import SolutionMethod
 
 
@@ -75,8 +74,7 @@ class ReductionMethod(SolutionMethod):
     def _reduce_all_equations(self):
         eq_to_reduce = self._equation_to_resolve.clon()
         eq_to_reduce.multiply(-1.0)
-        equation_adder = EquationListEquationSum(eq_to_reduce)
-        self._equation_system_to_recurse.apply_operation(equation_adder)
+        self._equation_system_to_recurse.apply_operation(EquationListEquationSum(eq_to_reduce))
 
     def merge_solutions(self):
         for variable_name in self._equation_system_to_recurse.get_solutions_name_set():
@@ -85,7 +83,5 @@ class ReductionMethod(SolutionMethod):
             self._equation_system.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
                 self._equation_to_resolve.apply(variable_name, variable_solution_value)
-        equation_simplifier = EquationSimplify()
-        equation_simplifier.set_equation(self._equation_to_resolve)
-        equation_simplifier.apply()
+        self._equation_to_resolve.apply_operation(Equation.EquationSimplifyer())
 

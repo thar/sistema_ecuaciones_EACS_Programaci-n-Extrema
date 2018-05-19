@@ -33,8 +33,7 @@ class EquationSystem:
         return set(self._solutions.keys())
 
     def apply_operation(self, operation):
-        operation.set_equation_list(self._equation_list)
-        operation.apply()
+        operation(self)
 
     def normalize(self):
         for eq in self._equation_list:

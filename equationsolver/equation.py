@@ -12,6 +12,48 @@ class Side(Enum):
 
 
 class Equation:
+    class Operation:
+        def __init__(self):
+            self._equation = None
+
+        def set_equation(self, equation):
+            self._equation = equation
+
+        def apply(self):
+            raise NotImplemented
+
+        def __call__(self, equation):
+            self.set_equation(equation)
+            self.apply()
+
+    class AddTermBothSides(Operation):
+        def __init__(self, term):
+            Equation.Operation.__init__(self)
+            self._term = term
+
+        def apply(self):
+            self._equation._expression[Side.left].add_term(self._term)
+            self._equation._expression[Side.right].add_term(self._term)
+
+    class SumEquation(Operation):
+        def __init__(self, equation):
+            Equation.Operation.__init__(self)
+            self._equation_to_add = equation
+
+        def apply(self):
+            for side in Side:
+                self._equation._expression[side].add_expression(self._equation_to_add._expression[side])
+
+    class EquationSimplifyer(Operation):
+        def __init__(self):
+            Equation.Operation.__init__(self)
+
+        def apply(self):
+            for side in Side:
+                self._equation.simplify_constant(side)
+                for name in self._equation.get_name_set():
+                    self._equation.simplify_variable(side, name)
+
     def __init__(self, left_expression=None, right_expression=None):
         self._expression = {}
         if left_expression:
@@ -24,8 +66,10 @@ class Equation:
             self._expression[Side.right] = ExpressionBuilder().build()
 
     def add(self, term):
-        self._expression[Side.left].add_term(term)
-        self._expression[Side.right].add_term(term)
+        self.apply_operation(Equation.AddTermBothSides(term))
+
+    def apply_operation(self, op):
+        op(self)
 
     def add_side(self, side, term):
         self._expression[side].add_term(term)

@@ -8,5 +8,8 @@ class EquationListOperationApplier(EquationListOperation):
 
     def apply(self):
         for eq in self._equation_list:
-            self._operation.set_equation(eq)
-            self._operation.apply()
+            eq.apply_operation(self._operation)
+
+    def __call__(self, equation_system):
+        self.set_equation_list(equation_system._equation_list)
+        self.apply()
