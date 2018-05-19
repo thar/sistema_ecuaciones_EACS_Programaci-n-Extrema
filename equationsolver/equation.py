@@ -44,6 +44,15 @@ class Equation:
             for side in Side:
                 self._equation._expression[side].add_expression(self._equation_to_add._expression[side])
 
+    class ValueMultiplier(Operation):
+        def __init__(self, value):
+            Equation.Operation.__init__(self)
+            self._value = value
+
+        def apply(self):
+            for side in Side:
+                self._equation._expression[side].multiply(self._value)
+
     class EquationSimplifyer(Operation):
         def __init__(self):
             Equation.Operation.__init__(self)
@@ -79,8 +88,7 @@ class Equation:
             self._expression[side].add_expression(equation._expression[side])
 
     def multiply(self, value):
-        for side in Side:
-            self._expression[side].multiply(value)
+        self.apply_operation(Equation.ValueMultiplier(value))
 
     def get_value_variable(self, side, name):
         return self._expression[side].get_value_variable(name)
