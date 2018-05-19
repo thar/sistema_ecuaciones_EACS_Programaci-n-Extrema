@@ -74,21 +74,20 @@ class Equation:
         else:
             self._expression[Side.right] = ExpressionBuilder().build()
 
-    def add(self, term):
-        self.apply_operation(Equation.AddTermBothSides(term))
-
     def apply_operation(self, op):
         op(self)
 
-    def add_side(self, side, term):
-        self._expression[side].add_term(term)
-
     def add_equation(self, equation):
-        for side in Side:
-            self._expression[side].add_expression(equation._expression[side])
+        self.apply_operation(Equation.SumEquation(equation))
+
+    def add(self, term):
+        self.apply_operation(Equation.AddTermBothSides(term))
 
     def multiply(self, value):
         self.apply_operation(Equation.ValueMultiplier(value))
+
+    def add_side(self, side, term):
+        self._expression[side].add_term(term)
 
     def get_value_variable(self, side, name):
         return self._expression[side].get_value_variable(name)
