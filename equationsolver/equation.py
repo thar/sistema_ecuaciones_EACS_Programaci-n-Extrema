@@ -109,6 +109,24 @@ class Equation:
                 self._equation.move_variable_to_side(name, Side.left)
             self._equation.apply_operation(Equation.EquationSimplifyer())
 
+    class VariableIsolator(Operation):
+        def __init__(self, variable_name):
+            Equation.Operation.__init__(self)
+            self._variable_name = variable_name
+
+        def apply(self):
+            self._equation.apply_operation(Equation.EquationSimplifyer())
+            self._equation.apply_operation(Equation.ConstantMover(Side.right))
+            for name in self._equation.get_name_set():
+                if name != self._variable_name:
+                    self._equation.apply_operation(Equation.VariableMover(name, Side.right))
+                else:
+                    self._equation.apply_operation(Equation.VariableMover(self._variable_name, Side.left))
+            self._equation.apply_operation(Equation.EquationSimplifyer())
+            self._equation.apply_operation(
+                Equation.ValueMultiplier(1.0 / self._equation.get_value_variable(Side.left, self._variable_name)))
+            self._equation.apply_operation(Equation.EquationSimplifyer())
+
     class EquationSimplifyer(Operation):
         def __init__(self):
             Equation.Operation.__init__(self)
@@ -155,16 +173,7 @@ class Equation:
         self.apply_operation(Equation.Normalizer())
 
     def isolate_variable(self, variable_name):
-        self.apply_operation(Equation.EquationSimplifyer())
-        self.move_constant_to_side(Side.right)
-        for name in self.get_name_set():
-            if name != variable_name:
-                self.move_variable_to_side(name, Side.right)
-            else:
-                self.move_variable_to_side(variable_name, Side.left)
-        self.apply_operation(Equation.EquationSimplifyer())
-        self.multiply(1.0/self.get_value_variable(Side.left, name))
-        self.apply_operation(Equation.EquationSimplifyer())
+        self.apply_operation(Equation.VariableIsolator(variable_name))
 
     def add_side(self, side, term):
         self._expression[side].add_term(term)
