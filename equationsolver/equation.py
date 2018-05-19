@@ -53,6 +53,19 @@ class Equation:
             for side in Side:
                 self._equation._expression[side].multiply(self._value)
 
+    class ValueApplier(Operation):
+        def __init__(self, name, value):
+            Equation.Operation.__init__(self)
+            self._name = name
+            self._value = value
+
+        def apply(self):
+            if self._name not in self._equation.get_name_set():
+                raise LookupError
+            for side in Side:
+                if self._name in self._equation._expression[side].get_name_set():
+                    self._equation._expression[side].apply(self._name, self._value)
+
     class EquationSimplifyer(Operation):
         def __init__(self):
             Equation.Operation.__init__(self)
@@ -86,6 +99,9 @@ class Equation:
     def multiply(self, value):
         self.apply_operation(Equation.ValueMultiplier(value))
 
+    def apply(self, name, value):
+        self.apply_operation(Equation.ValueApplier(name, value))
+
     def add_side(self, side, term):
         self._expression[side].add_term(term)
 
@@ -115,13 +131,6 @@ class Equation:
 
     def clon(self):
         return deepcopy(self)
-
-    def apply(self, name, value):
-        if name not in self.get_name_set():
-            raise LookupError
-        for side in Side:
-            if name in self._expression[side].get_name_set():
-                self._expression[side].apply(name, value)
 
     def invert(self):
         new_expression = {
