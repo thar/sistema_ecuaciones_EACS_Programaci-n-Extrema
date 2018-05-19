@@ -66,6 +66,49 @@ class Equation:
                 if self._name in self._equation._expression[side].get_name_set():
                     self._equation._expression[side].apply(self._name, self._value)
 
+    class TermMover(Operation):
+        def __init__(self, side_to_move_to):
+            Equation.Operation.__init__(self)
+            self._term = None
+            self._move_to = side_to_move_to
+            self._remove_from = Side.right
+            if self._move_to == Side.right:
+                self._remove_from = Side.left
+
+        def apply(self):
+            self._init_term()
+            if self._term.value != 0:
+                self._equation.apply_operation(Equation.AddTermBothSides(self._term))
+
+        def _init_term(self):
+            raise NotImplemented
+
+    class VariableMover(TermMover):
+        def __init__(self, name, side_to_move_to):
+            Equation.TermMover.__init__(self, side_to_move_to)
+            self._name = name
+
+        def _init_term(self):
+            variable_value = self._equation.get_value_variable(self._remove_from, self._name)
+            self._term = VariableBuilder().name(self._name).value(-variable_value).build()
+
+    class ConstantMover(TermMover):
+        def __init__(self, side_to_move_to):
+            Equation.TermMover.__init__(self, side_to_move_to)
+
+        def _init_term(self):
+            self._term = ConstantBuilder().value(-self._equation.get_value_constant(self._remove_from)).build()
+
+    class Normalizer(Operation):
+        def __init__(self):
+            Equation.Operation.__init__(self)
+
+        def apply(self):
+            self._equation.move_constant_to_side(Side.right)
+            for name in self._equation.get_name_set():
+                self._equation.move_variable_to_side(name, Side.left)
+            self._equation.apply_operation(Equation.EquationSimplifyer())
+
     class EquationSimplifyer(Operation):
         def __init__(self):
             Equation.Operation.__init__(self)
@@ -101,6 +144,27 @@ class Equation:
 
     def apply(self, name, value):
         self.apply_operation(Equation.ValueApplier(name, value))
+
+    def move_variable_to_side(self, name, side):
+        self.apply_operation(Equation.VariableMover(name, side))
+
+    def move_constant_to_side(self, side):
+        self.apply_operation(Equation.ConstantMover(side))
+
+    def normalize(self):
+        self.apply_operation(Equation.Normalizer())
+
+    def isolate_variable(self, variable_name):
+        self.apply_operation(Equation.EquationSimplifyer())
+        self.move_constant_to_side(Side.right)
+        for name in self.get_name_set():
+            if name != variable_name:
+                self.move_variable_to_side(name, Side.right)
+            else:
+                self.move_variable_to_side(variable_name, Side.left)
+        self.apply_operation(Equation.EquationSimplifyer())
+        self.multiply(1.0/self.get_value_variable(Side.left, name))
+        self.apply_operation(Equation.EquationSimplifyer())
 
     def add_side(self, side, term):
         self._expression[side].add_term(term)
@@ -139,42 +203,8 @@ class Equation:
         }
         self._expression = new_expression
 
-    def move_variable_to_side(self, name, side):
-        side_to_remove_from = Side.right
-        if side == Side.right:
-            side_to_remove_from = Side.left
-        variable_value = self.get_value_variable(side_to_remove_from, name)
-        if variable_value != 0:
-            self.add(VariableBuilder().name(name).value(-variable_value).build())
-
-    def move_constant_to_side(self, side):
-        side_to_remove_from = Side.right
-        if side == Side.right:
-            side_to_remove_from = Side.left
-        constant_value = self.get_value_constant(side_to_remove_from)
-        if constant_value != 0:
-            self.add(ConstantBuilder().value(-constant_value).build())
-
     def is_solution_equation(self):
         return len(self.get_name_set()) == 1
-
-    def normalize(self):
-        self.move_constant_to_side(Side.right)
-        for name in self.get_name_set():
-            self.move_variable_to_side(name, Side.left)
-        self.apply_operation(Equation.EquationSimplifyer())
-
-    def isolate_variable(self, variable_name):
-        self.apply_operation(Equation.EquationSimplifyer())
-        self.move_constant_to_side(Side.right)
-        for name in self.get_name_set():
-            if name != variable_name:
-                self.move_variable_to_side(name, Side.right)
-            else:
-                self.move_variable_to_side(variable_name, Side.left)
-        self.apply_operation(Equation.EquationSimplifyer())
-        self.multiply(1.0/self.get_value_variable(Side.left, name))
-        self.apply_operation(Equation.EquationSimplifyer())
 
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
