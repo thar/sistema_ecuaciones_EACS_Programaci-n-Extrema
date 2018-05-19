@@ -123,12 +123,6 @@ class Equation:
         }
         self._expression = new_expression
 
-    def simplify(self):
-        for side in Side:
-            self.simplify_constant(side)
-            for name in self.get_name_set():
-                self.simplify_variable(side, name)
-
     def move_variable_to_side(self, name, side):
         side_to_remove_from = Side.right
         if side == Side.right:
@@ -152,19 +146,19 @@ class Equation:
         self.move_constant_to_side(Side.right)
         for name in self.get_name_set():
             self.move_variable_to_side(name, Side.left)
-        self.simplify()
+        self.apply_operation(Equation.EquationSimplifyer())
 
     def isolate_variable(self, variable_name):
-        self.simplify()
+        self.apply_operation(Equation.EquationSimplifyer())
         self.move_constant_to_side(Side.right)
         for name in self.get_name_set():
             if name != variable_name:
                 self.move_variable_to_side(name, Side.right)
             else:
                 self.move_variable_to_side(variable_name, Side.left)
-        self.simplify()
+        self.apply_operation(Equation.EquationSimplifyer())
         self.multiply(1.0/self.get_value_variable(Side.left, name))
-        self.simplify()
+        self.apply_operation(Equation.EquationSimplifyer())
 
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
