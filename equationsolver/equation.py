@@ -137,16 +137,24 @@ class Equation:
                 for name in self._equation.get_name_set():
                     self._equation.simplify_variable(side, name)
 
+    class EquationInverter(Operation):
+        def __init__(self):
+            Equation.Operation.__init__(self)
+
+        def apply(self):
+            new_expression = {
+                Side.left: self._equation._expression[Side.right],
+                Side.right: self._equation._expression[Side.left]
+            }
+            self._equation._expression = new_expression
+
     def __init__(self, left_expression=None, right_expression=None):
-        self._expression = {}
+        self._expression = {Side.left: ExpressionBuilder().build(),
+                            Side.right: ExpressionBuilder().build()}
         if left_expression:
             self._expression[Side.left] = left_expression
-        else:
-            self._expression[Side.left] = ExpressionBuilder().build()
         if right_expression:
             self._expression[Side.right] = right_expression
-        else:
-            self._expression[Side.right] = ExpressionBuilder().build()
 
     def apply_operation(self, op):
         op(self)
@@ -174,6 +182,9 @@ class Equation:
 
     def isolate_variable(self, variable_name):
         self.apply_operation(Equation.VariableIsolator(variable_name))
+
+    def invert(self):
+        self.apply_operation(Equation.EquationInverter())
 
     def add_side(self, side, term):
         self._expression[side].add_term(term)
@@ -204,13 +215,6 @@ class Equation:
 
     def clon(self):
         return deepcopy(self)
-
-    def invert(self):
-        new_expression = {
-            Side.left: self._expression[Side.right],
-            Side.right: self._expression[Side.left]
-        }
-        self._expression = new_expression
 
     def is_solution_equation(self):
         return len(self.get_name_set()) == 1
