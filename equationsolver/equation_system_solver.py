@@ -9,4 +9,4 @@ class EquationSystemSolver:
         self._solution_method.resolve()
 
     def get_solution(self, name):
-        return self._equation_system.get_solution(name)
+        return self._solution_method.get_solution(name)
