@@ -21,17 +21,6 @@ class EquationSystem:
             name_set.update(equation.get_name_set())
         return name_set
 
-    def set_solution(self, name, equation):
-        self._solutions[name] = equation
-
-    def get_solution(self, name):
-        if name not in self._solutions:
-            raise NotSolved
-        return self._solutions[name]
-
-    def get_solutions_name_set(self):
-        return set(self._solutions.keys())
-
     def apply_operation(self, operation):
         operation(self)
 
@@ -64,16 +53,12 @@ class EquationSystem:
                 temporal_equations.append(eq)
         self._equation_list = temporal_equations
         self.apply_solutions(found_solutions)
-        self._solutions.update(found_solutions)
         return found_solutions
 
     def apply_solutions(self, solutions):
         for eq in self._equation_list:
             for variable_name, solution_eq in solutions.iteritems():
                 eq.apply_operation(Equation.ValueApplier(variable_name, solution_eq.get_value_constant(Side.right)))
-
-    def get_solution_value(self, name):
-        return self._solutions[name].get_value_constant(Side.right)
 
     def clon(self):
         return deepcopy(self)
