@@ -12,7 +12,6 @@ class ReductionMethod(SolutionMethod):
         self._variable_to_reduce = None
         self._common_multiple = 1.0
         self._equation_to_resolve = None
-        self._equation_system_to_recurse = None
         self._solution_method_recurse = None
 
     def resolve(self):
@@ -37,24 +36,24 @@ class ReductionMethod(SolutionMethod):
         self.set_solution(self._variable_to_reduce, self._equation_to_resolve)
 
     def _resolve_recursive(self):
-        self._equation_system_to_recurse = self._equation_system.clon()
-        self._equation_system_to_recurse.apply_operation(CommonMultipleVariableSetter(self._variable_to_reduce))
-        self._store_equation_to_reduce()
-        self._reduce_all_equations()
-        self._equation_system_to_recurse.apply_operation(EquationListSimplify())
+        equation_system_to_recurse = self._equation_system.clon()
+        equation_system_to_recurse.apply_operation(CommonMultipleVariableSetter(self._variable_to_reduce))
+        self._store_equation_to_reduce(equation_system_to_recurse)
+        self._reduce_all_equations(equation_system_to_recurse)
+        equation_system_to_recurse.apply_operation(EquationListSimplify())
         self._solution_method_recurse = ReductionMethod()
-        self._solution_method_recurse.set(self._equation_system_to_recurse)
+        self._solution_method_recurse.set(equation_system_to_recurse)
         self._solution_method_recurse.resolve()
         self.merge_solutions()
 
-    def _store_equation_to_reduce(self):
-        self._equation_to_resolve = self._equation_system_to_recurse.get_equation_that_contains_name_set(
+    def _store_equation_to_reduce(self, equation_system_to_recurse):
+        self._equation_to_resolve = equation_system_to_recurse.get_equation_that_contains_name_set(
             {self._variable_to_reduce}).clon()
 
-    def _reduce_all_equations(self):
+    def _reduce_all_equations(self, equation_system_to_recurse):
         eq_to_reduce = self._equation_to_resolve.clon()
         eq_to_reduce.multiply(-1.0)
-        self._equation_system_to_recurse.apply_operation(EquationListEquationSum(eq_to_reduce))
+        equation_system_to_recurse.apply_operation(EquationListEquationSum(eq_to_reduce))
 
     def merge_solutions(self):
         for variable_name in self._solution_method_recurse.get_solutions_name_set():
