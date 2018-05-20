@@ -65,6 +65,7 @@ class EquationSystem:
         self._equation_list = temporal_equations
         self.apply_solutions(found_solutions)
         self._solutions.update(found_solutions)
+        return found_solutions
 
     def apply_solutions(self, solutions):
         for eq in self._equation_list:
