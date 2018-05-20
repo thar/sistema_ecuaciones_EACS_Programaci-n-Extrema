@@ -1,5 +1,8 @@
 from equationsolver.equation import Side
-from equationsolver.equation_system import NotSolved
+
+
+class NotSolved(Exception):
+    pass
 
 
 class SolutionMethod:

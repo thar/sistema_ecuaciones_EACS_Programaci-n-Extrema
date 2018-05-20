@@ -3,10 +3,6 @@ from copy import deepcopy
 from equationsolver.equation import Side, Equation
 
 
-class NotSolved(Exception):
-    pass
-
-
 class EquationSystem:
     def __init__(self):
         self._equation_list = []
