@@ -174,9 +174,6 @@ class Equation:
     def normalize(self):
         self.apply_operation(Equation.Normalizer())
 
-    def isolate_variable(self, variable_name):
-        self.apply_operation(Equation.VariableIsolator(variable_name))
-
     def invert(self):
         self.apply_operation(Equation.EquationInverter())
 
