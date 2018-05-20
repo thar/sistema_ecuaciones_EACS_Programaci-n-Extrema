@@ -54,15 +54,17 @@ class EquationSystem:
 
     def pop_solution_equations(self):
         temporal_equations = []
+        found_solutions = {}
         for eq in self._equation_list:
             if eq.is_solution_equation():
                 solved_variable = eq.get_name_set().pop()
                 eq.isolate_variable(solved_variable)
-                self.set_solution(solved_variable, eq)
+                found_solutions[solved_variable] = eq
             else:
                 temporal_equations.append(eq)
         self._equation_list = temporal_equations
-        self.apply_solutions(self._solutions)
+        self.apply_solutions(found_solutions)
+        self._solutions.update(found_solutions)
 
     def apply_solutions(self, solutions):
         for eq in self._equation_list:
