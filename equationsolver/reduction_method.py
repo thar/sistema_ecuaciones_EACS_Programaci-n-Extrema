@@ -80,7 +80,7 @@ class ReductionMethod(SolutionMethod):
 
     def merge_solutions(self):
         for variable_name in self._equation_system_to_recurse.get_solutions_name_set():
-            variable_solution_equation = self._equation_system_to_recurse.get_solution(variable_name)
+            variable_solution_equation = self._solution_method_recurse.get_solution(variable_name)
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self._equation_system.set_solution(variable_name, variable_solution_equation)
             self._solution_method_recurse.set_solution(variable_name, variable_solution_equation)
