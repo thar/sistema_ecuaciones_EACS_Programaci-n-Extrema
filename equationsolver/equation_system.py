@@ -62,9 +62,9 @@ class EquationSystem:
             else:
                 temporal_equations.append(eq)
         self._equation_list = temporal_equations
-        self.apply_solutions()
+        self._apply_solutions()
 
-    def apply_solutions(self):
+    def _apply_solutions(self):
         for eq in self._equation_list:
             for variable_name in self._solutions.keys():
                 eq.apply_operation(Equation.ValueApplier(variable_name, self.get_solution_value(variable_name)))
