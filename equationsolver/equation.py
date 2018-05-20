@@ -104,9 +104,9 @@ class Equation:
             Equation.Operation.__init__(self)
 
         def apply(self):
-            self._equation.move_constant_to_side(Side.right)
+            self._equation.apply_operation(Equation.ConstantMover(Side.right))
             for name in self._equation.get_name_set():
-                self._equation.move_variable_to_side(name, Side.left)
+                self._equation.apply_operation(Equation.VariableMover(name, Side.left))
             self._equation.apply_operation(Equation.EquationSimplifyer())
 
     class VariableIsolator(Operation):

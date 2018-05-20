@@ -1,5 +1,6 @@
 from equationsolver.equation import Side, Equation
 from equationsolver.operations.equation_list_equation_sum import EquationListEquationSum
+from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
 from equationsolver.operations.equation_list_simplify import EquationListSimplify
 from equationsolver.solution_method import SolutionMethod
 
@@ -20,7 +21,8 @@ class ReductionMethod(SolutionMethod):
         if len(name_set) == 0:
             return
         self._variable_to_reduce = name_set.pop()
-        self._equation_system.move_variable_to_side(self._variable_to_reduce, Side.left)
+        self._equation_system.apply_operation(
+            EquationListOperationApplier(Equation.VariableMover(self._variable_to_reduce, Side.left)))
         self._equation_system.apply_operation(EquationListSimplify())
         if len(name_set) > 0:
             self._resolve_recursive()
@@ -85,4 +87,3 @@ class ReductionMethod(SolutionMethod):
             if variable_name in self._equation_to_resolve.get_name_set():
                 self._equation_to_resolve.apply_operation(Equation.ValueApplier(variable_name, variable_solution_value))
         self._equation_to_resolve.apply_operation(Equation.EquationSimplifyer())
-

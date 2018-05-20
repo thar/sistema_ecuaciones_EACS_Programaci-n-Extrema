@@ -24,14 +24,6 @@ class EquationSystem:
     def normalize(self):
         self.apply_operation(EquationListOperationApplier(Equation.Normalizer()))
 
-    def move_variable_to_side(self, variable_name, side):
-        for eq in self._equation_list:
-            eq.apply_operation(Equation.VariableMover(variable_name, side))
-
-    def move_constant_to_side(self, side):
-        for eq in self._equation_list:
-            eq.apply_operation(Equation.ConstantMover(side))
-
     def get_equation_with_name(self, name):
         for eq in self._equation_list:
             if name in eq.get_name_set():
