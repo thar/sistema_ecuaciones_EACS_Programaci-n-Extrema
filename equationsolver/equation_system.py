@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from equationsolver.equation import Side, Equation
+from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
 
 
 class EquationSystem:
@@ -21,8 +22,7 @@ class EquationSystem:
         operation(self)
 
     def normalize(self):
-        for eq in self._equation_list:
-            eq.apply_operation(Equation.Normalizer())
+        self.apply_operation(EquationListOperationApplier(Equation.Normalizer()))
 
     def move_variable_to_side(self, variable_name, side):
         for eq in self._equation_list:
