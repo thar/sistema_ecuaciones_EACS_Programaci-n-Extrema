@@ -171,12 +171,6 @@ class Equation:
     def apply(self, name, value):
         self.apply_operation(Equation.ValueApplier(name, value))
 
-    def move_variable_to_side(self, name, side):
-        self.apply_operation(Equation.VariableMover(name, side))
-
-    def move_constant_to_side(self, side):
-        self.apply_operation(Equation.ConstantMover(side))
-
     def normalize(self):
         self.apply_operation(Equation.Normalizer())
 
