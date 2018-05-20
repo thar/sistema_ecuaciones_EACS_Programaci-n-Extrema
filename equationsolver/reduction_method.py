@@ -11,6 +11,7 @@ class ReductionMethod(SolutionMethod):
         self._common_multiple = 1.0
         self._equation_to_resolve = None
         self._equation_system_to_recurse = None
+        self._solution_method_recurse = None
 
     def resolve(self):
         self._equation_system.apply_operation(EquationListSimplify())
@@ -31,6 +32,7 @@ class ReductionMethod(SolutionMethod):
     def _compute_solution(self):
         self._equation_to_resolve.apply_operation(Equation.VariableIsolator(self._variable_to_reduce))
         self._equation_system.set_solution(self._variable_to_reduce, self._equation_to_resolve)
+        self.set_solution(self._variable_to_reduce, self._equation_to_resolve)
 
     def _resolve_recursive(self):
         self._equation_system_to_recurse = self._equation_system.clon()
@@ -39,9 +41,9 @@ class ReductionMethod(SolutionMethod):
         self._store_equation_to_reduce()
         self._reduce_all_equations()
         self._equation_system_to_recurse.apply_operation(EquationListSimplify())
-        reduction_method = ReductionMethod()
-        reduction_method.set(self._equation_system_to_recurse)
-        reduction_method.resolve()
+        self._solution_method_recurse = ReductionMethod()
+        self._solution_method_recurse.set(self._equation_system_to_recurse)
+        self._solution_method_recurse.resolve()
         self.merge_solutions()
 
     def _get_reducible_variable_common_multiple(self):
@@ -81,6 +83,7 @@ class ReductionMethod(SolutionMethod):
             variable_solution_equation = self._equation_system_to_recurse.get_solution(variable_name)
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self._equation_system.set_solution(variable_name, variable_solution_equation)
+            self._solution_method_recurse.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
                 self._equation_to_resolve.apply_operation(Equation.ValueApplier(variable_name, variable_solution_value))
         self._equation_to_resolve.apply_operation(Equation.EquationSimplifyer())
