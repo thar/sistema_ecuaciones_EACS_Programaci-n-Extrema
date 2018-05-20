@@ -58,7 +58,7 @@ class EquationSystem:
             if eq.is_solution_equation():
                 solved_variable = eq.get_name_set().pop()
                 eq.isolate_variable(solved_variable)
-                self._solutions[solved_variable] = eq
+                self.set_solution(solved_variable, eq)
             else:
                 temporal_equations.append(eq)
         self._equation_list = temporal_equations
