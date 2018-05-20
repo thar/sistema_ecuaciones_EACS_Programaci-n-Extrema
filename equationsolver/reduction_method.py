@@ -1,4 +1,5 @@
 from equationsolver.equation import Side, Equation
+from equationsolver.operations.common_multiple_variable_setter import CommonMultipleVariableSetter
 from equationsolver.operations.equation_list_equation_sum import EquationListEquationSum
 from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
 from equationsolver.operations.equation_list_simplify import EquationListSimplify
@@ -37,8 +38,7 @@ class ReductionMethod(SolutionMethod):
 
     def _resolve_recursive(self):
         self._equation_system_to_recurse = self._equation_system.clon()
-        self._get_reducible_variable_common_multiple()
-        self._multiply_equations_to_reach_common_multiple()
+        self._equation_system_to_recurse.apply_operation(CommonMultipleVariableSetter(self._variable_to_reduce))
         self._store_equation_to_reduce()
         self._reduce_all_equations()
         self._equation_system_to_recurse.apply_operation(EquationListSimplify())
@@ -46,29 +46,6 @@ class ReductionMethod(SolutionMethod):
         self._solution_method_recurse.set(self._equation_system_to_recurse)
         self._solution_method_recurse.resolve()
         self.merge_solutions()
-
-    def _get_reducible_variable_common_multiple(self):
-        self._equation_system_to_recurse.normalize()
-        reducible_variable_values = self._equation_system_to_recurse.get_variable_name_values(Side.left,
-                                                                                              self._variable_to_reduce)
-        self._common_multiple = 1.0
-        for value in reducible_variable_values:
-            if value != 0:
-                self._common_multiple *= value
-        self._common_multiple = abs(self._common_multiple)
-
-    def _multiply_equations_to_reach_common_multiple(self):
-        self._equation_system_to_recurse.normalize()
-        reducible_variable_values = self._equation_system_to_recurse.get_variable_name_values(Side.left,
-                                                                                              self._variable_to_reduce)
-        multiply_values = []
-        for i in range(len(reducible_variable_values)):
-            value = reducible_variable_values[i]
-            if value != 0:
-                multiply_values.append(self._common_multiple / value)
-            else:
-                multiply_values.append(1.0)
-        self._equation_system_to_recurse.multiply_by_list(multiply_values)
 
     def _store_equation_to_reduce(self):
         self._equation_to_resolve = self._equation_system_to_recurse.get_equation_that_contains_name_set(
