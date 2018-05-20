@@ -29,7 +29,7 @@ class ReductionMethod(SolutionMethod):
         self._compute_solution()
 
     def _compute_solution(self):
-        self._equation_to_resolve.isolate_variable(self._variable_to_reduce)
+        self._equation_to_resolve.apply_operation(Equation.VariableIsolator(self._variable_to_reduce))
         self._equation_system.set_solution(self._variable_to_reduce, self._equation_to_resolve)
 
     def _resolve_recursive(self):
@@ -82,6 +82,6 @@ class ReductionMethod(SolutionMethod):
             variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self._equation_system.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
-                self._equation_to_resolve.apply(variable_name, variable_solution_value)
+                self._equation_to_resolve.apply_operation(Equation.ValueApplier(variable_name, variable_solution_value))
         self._equation_to_resolve.apply_operation(Equation.EquationSimplifyer())
 

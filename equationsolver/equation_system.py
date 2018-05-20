@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from equationsolver.equation import Side
+from equationsolver.equation import Side, Equation
 
 
 class NotSolved(Exception):
@@ -37,15 +37,15 @@ class EquationSystem:
 
     def normalize(self):
         for eq in self._equation_list:
-            eq.normalize()
+            eq.apply_operation(Equation.Normalizer())
 
     def move_variable_to_side(self, variable_name, side):
         for eq in self._equation_list:
-            eq.move_variable_to_side(variable_name, side)
+            eq.apply_operation(Equation.VariableMover(variable_name, side))
 
     def move_constant_to_side(self, side):
         for eq in self._equation_list:
-            eq.move_constant_to_side(side)
+            eq.apply_operation(Equation.ConstantMover(side))
 
     def get_equation_with_name(self, name):
         for eq in self._equation_list:
@@ -65,9 +65,9 @@ class EquationSystem:
         self.apply_solutions()
 
     def apply_solutions(self):
-        for variable_name in self._solutions.keys():
-            for eq in self._equation_list:
-                eq.apply(variable_name, self.get_solution_value(variable_name))
+        for eq in self._equation_list:
+            for variable_name in self._solutions.keys():
+                eq.apply_operation(Equation.ValueApplier(variable_name, self.get_solution_value(variable_name)))
 
     def get_solution_value(self, name):
         return self._solutions[name].get_value_constant(Side.right)
@@ -83,7 +83,7 @@ class EquationSystem:
 
     def multiply_by_list(self, values_list):
         for i in range(len(values_list)):
-            self._equation_list[i].multiply(values_list[i])
+            self._equation_list[i].apply_operation(Equation.ValueMultiplier(values_list[i]))
 
     def get_equation_that_contains_name_set(self, variable_name_set):
         for eq in self._equation_list:
