@@ -18,7 +18,7 @@ class EquationSystem:
         return name_set
 
     def apply_operation(self, operation):
-        operation(self)
+        operation(self._equation_list)
 
     def normalize(self):
         self.apply_operation(EquationListOperationApplier(Equation.Normalizer()))
