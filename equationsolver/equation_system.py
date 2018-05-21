@@ -7,7 +7,6 @@ from equationsolver.operations.equation_list_operation_applier import EquationLi
 class EquationSystem:
     def __init__(self):
         self._equation_list = []
-        self._solutions = {}
 
     def add(self, equation):
         self._equation_list.append(equation.clon())
