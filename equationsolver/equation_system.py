@@ -20,9 +20,6 @@ class EquationSystem:
     def apply_operation(self, operation):
         operation(self._equation_list)
 
-    def normalize(self):
-        self.apply_operation(EquationListOperationApplier(Equation.Normalizer()))
-
     def get_equation_with_name(self, name):
         for eq in self._equation_list:
             if name in eq.get_name_set():
@@ -49,16 +46,6 @@ class EquationSystem:
 
     def clon(self):
         return deepcopy(self)
-
-    def get_variable_name_values(self, side, name):
-        values = []
-        for eq in self._equation_list:
-            values.append(eq.get_value_variable(side, name))
-        return values
-
-    def multiply_by_list(self, values_list):
-        for i in range(len(values_list)):
-            self._equation_list[i].apply_operation(Equation.ValueMultiplier(values_list[i]))
 
     def get_equation_that_contains_name_set(self, variable_name_set):
         for eq in self._equation_list:
