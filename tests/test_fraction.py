@@ -50,3 +50,15 @@ class FractionTestCase(unittest.TestCase):
         fraction = Fraction(1, 3)
         fraction /= Fraction(2, 3)
         self.assertEqual(Fraction(1, 2), fraction)
+
+    def testFractionStr(self):
+        self.assertEqual(str(Fraction(1, 2)), "1/2")
+        self.assertEqual(str(Fraction(-1, 2)), "-1/2")
+        self.assertEqual(str(Fraction(3, 3)), "1")
+        self.assertEqual(str(Fraction(6, 3)), "2")
+
+    def testFractionRepr(self):
+        self.assertEqual(repr(Fraction(1, 2)), "Fraction(1, 2)")
+        self.assertEqual(repr(Fraction(-1, 2)), "Fraction(-1, 2)")
+        self.assertEqual(repr(Fraction(3, 3)), "Fraction(1, 1)")
+        self.assertEqual(repr(Fraction(6, 3)), "Fraction(2, 1)")

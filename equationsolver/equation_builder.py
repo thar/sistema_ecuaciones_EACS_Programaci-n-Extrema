@@ -43,53 +43,53 @@ class EquationBuilder:
 
     @staticmethod
     def x_equals_1():
-        return EquationBuilder().left_term(VariableBuilder().name('x').value(1.0).build()).right_term(
-            ConstantBuilder().value(1.0).build()).build()
+        return EquationBuilder().left_term(VariableBuilder().name('x').value(1).build()).right_term(
+            ConstantBuilder().value(1).build()).build()
 
     @staticmethod
     def y_equals_1():
-        return EquationBuilder().left_term(VariableBuilder().name('y').value(1.0).build()).right_term(
-            ConstantBuilder().value(1.0).build()).build()
+        return EquationBuilder().left_term(VariableBuilder().name('y').value(1).build()).right_term(
+            ConstantBuilder().value(1).build()).build()
 
     @staticmethod
     def x_equals_0():
-        return EquationBuilder().left_term(VariableBuilder().name('x').value(1.0).build()).right_term(
-            ConstantBuilder().value(0.0).build()).build()
+        return EquationBuilder().left_term(VariableBuilder().name('x').value(1).build()).right_term(
+            ConstantBuilder().value(0).build()).build()
 
     @staticmethod
     def y_equals_0():
-        return EquationBuilder().left_term(VariableBuilder().name('y').value(1.0).build()).right_term(
-            ConstantBuilder().value(0.0).build()).build()
+        return EquationBuilder().left_term(VariableBuilder().name('y').value(1).build()).right_term(
+            ConstantBuilder().value(0).build()).build()
 
     @staticmethod
     def one_equals_x():
-        return EquationBuilder().right_term(VariableBuilder().name('x').value(1.0).build()).left_term(
-            ConstantBuilder().value(1.0).build()).build()
+        return EquationBuilder().right_term(VariableBuilder().name('x').value(1).build()).left_term(
+            ConstantBuilder().value(1).build()).build()
 
     @staticmethod
     def one_equals_y():
-        return EquationBuilder().right_term(VariableBuilder().name('y').value(1.0).build()).left_term(
-            ConstantBuilder().value(1.0).build()).build()
+        return EquationBuilder().right_term(VariableBuilder().name('y').value(1).build()).left_term(
+            ConstantBuilder().value(1).build()).build()
 
     @staticmethod
     def zero_equals_x():
-        return EquationBuilder().right_term(VariableBuilder().name('x').value(1.0).build()).left_term(
-            ConstantBuilder().value(0.0).build()).build()
+        return EquationBuilder().right_term(VariableBuilder().name('x').value(1).build()).left_term(
+            ConstantBuilder().value(0).build()).build()
 
     @staticmethod
     def zero_equals_y():
-        return EquationBuilder().right_term(VariableBuilder().name('y').value(1.0).build()).left_term(
-            ConstantBuilder().value(0.0).build()).build()
+        return EquationBuilder().right_term(VariableBuilder().name('y').value(1).build()).left_term(
+            ConstantBuilder().value(0).build()).build()
 
     @staticmethod
     def y_equals_x():
-        return EquationBuilder().right_term(VariableBuilder().name('x').value(1.0).build()).left_term(
-            VariableBuilder().name('y').value(1.0).build()).build()
+        return EquationBuilder().right_term(VariableBuilder().name('x').value(1).build()).left_term(
+            VariableBuilder().name('y').value(1).build()).build()
 
     @staticmethod
     def zero_equals_zero():
-        return EquationBuilder().left_term(ConstantBuilder().value(0.0).build()).right_term(
-            ConstantBuilder().value(0.0).build()).build()
+        return EquationBuilder().left_term(ConstantBuilder().value(0).build()).right_term(
+            ConstantBuilder().value(0).build()).build()
 
     def build(self):
         return Equation(left_expression=self._left_expression, right_expression=self._right_expression)

@@ -3,6 +3,7 @@ import unittest
 from equationsolver.constant_builder import ConstantBuilder
 from equationsolver.expression import NotSimplified
 from equationsolver.expression_builder import ExpressionBuilder
+from equationsolver.fraction import Fraction
 from equationsolver.variable_builder import VariableBuilder
 
 
@@ -279,3 +280,29 @@ class ExpressionTestCase(unittest.TestCase):
         expression.simplify_variable(variable1.name)
         self.assertEqual(expression.get_value_constant(), 0.0)
         self.assertEqual(expression.get_value_variable(variable1.name), 0.0)
+
+    def testStrExpression(self):
+        expression = ExpressionBuilder().constant_fraction(1, 2).variable_fraction('x', -2, 3).build()
+        self.assertEqual(str(expression), '+1/2 -(2/3)*x')
+        expression = ExpressionBuilder().constant_fraction(1, 1).variable_fraction('x', -2, 2).build()
+        self.assertEqual(str(expression), '+1 -x')
+        expression = ExpressionBuilder().constant_fraction(1, 2).variable_fraction('x', -2, 1).build()
+        self.assertEqual(str(expression), '+1/2 -2*x')
+        expression = ExpressionBuilder().constant_fraction(0, 1).variable_fraction('x', 0, 2).build()
+        self.assertEqual(str(expression), '+0')
+        expression = ExpressionBuilder().variable_fraction('x', 0, 2).variable_fraction('x', 0, 2).build()
+        self.assertEqual(str(expression), '+0*x')
+        expression = ExpressionBuilder().variable_fraction('x', 0, 2).constant_fraction(0, 2).build()
+        self.assertEqual(str(expression), '+0*x')
+
+    def testReprExpression(self):
+        expression = ExpressionBuilder().constant_fraction(1, 2).variable_fraction('x', -2, 3).build()
+        self.assertEqual(repr(expression), 'Expression([Constant(Fraction(1, 2)), Variable(\'x\', Fraction(-2, 3))])')
+        expression = ExpressionBuilder().constant_fraction(1, 1).variable_fraction('x', -2, 2).build()
+        self.assertEqual(repr(expression), 'Expression([Constant(Fraction(1, 1)), Variable(\'x\', Fraction(-1, 1))])')
+        expression = ExpressionBuilder().constant_fraction(0, 1).variable_fraction('x', 0, 2).build()
+        self.assertEqual(repr(expression), 'Expression([Constant(Fraction(0, 1))])')
+        expression = ExpressionBuilder().variable_fraction('x', 0, 2).variable_fraction('x', 0, 2).build()
+        self.assertEqual(repr(expression), 'Expression([Variable(\'x\', Fraction(0, 1))])')
+        expression = ExpressionBuilder().variable_fraction('x', 0, 2).constant_fraction(0, 2).build()
+        self.assertEqual(repr(expression), 'Expression([Variable(\'x\', Fraction(0, 1))])')

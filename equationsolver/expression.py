@@ -118,3 +118,6 @@ class Expression:
 
     def __str__(self):
         return ' '.join([str(term) for term in self._term_list])
+
+    def __repr__(self):
+        return 'Expression([' + ', '.join([repr(term) for term in self._term_list]) + '])'

@@ -21,3 +21,6 @@ class Constant(Term):
     def __str__(self):
         sign = '+' if self.value >= 0 else ''
         return sign + str(self.value)
+
+    def __repr__(self):
+        return 'Constant(' + repr(self._value) + ')'

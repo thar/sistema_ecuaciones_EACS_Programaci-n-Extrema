@@ -18,5 +18,9 @@ class VariableBuilder:
             self._value = Fraction(value_arg, 1)
         return self
 
+    def fraction(self, num, den):
+        self._value = Fraction(num, den)
+        return self
+
     def build(self):
         return Variable(self._name, self._value)

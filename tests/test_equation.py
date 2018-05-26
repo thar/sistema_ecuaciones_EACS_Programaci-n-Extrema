@@ -215,3 +215,9 @@ class EquationTestCase(unittest.TestCase):
         eq = EquationBuilder.x_equals_1()
         eq.invert()
         self.assertEqual(eq.get_value_constant(Side.left), 1.0)
+
+    def testStrEquation(self):
+        self.assertEqual(str(EquationBuilder.x_equals_1()), '+x = +1')
+
+    def testReprEquation(self):
+        self.assertEqual(repr(EquationBuilder.x_equals_1()), 'Equation(Expression([Variable(\'x\', Fraction(1, 1))]), Expression([Constant(Fraction(1, 1))]))')

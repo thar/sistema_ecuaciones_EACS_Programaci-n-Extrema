@@ -30,5 +30,19 @@ class Variable(Term):
         return term_equality_analyzer.is_equal()
 
     def __str__(self):
-        sign = '+' if self.value >= 0 else ''
-        return sign + str(self.value) + self.name
+        if self.value < 0:
+            value_string = '-'
+        else:
+            value_string = '+'
+        self_absolute_value = abs(self.value)
+        if self_absolute_value != 1:
+            if self.value % 1 == 0 or self_absolute_value == 0:
+                value_string += str(self_absolute_value)
+            else:
+                value_string += '(' + str(self_absolute_value) + ')'
+            return value_string + '*' + self.name
+        else:
+            return value_string + self.name
+
+    def __repr__(self):
+        return 'Variable(\'' + self._name + '\', ' + repr(self._value) + ')'

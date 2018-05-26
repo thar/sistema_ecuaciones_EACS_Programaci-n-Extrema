@@ -54,3 +54,6 @@ class EquationSystem:
 
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)
+
+    def __repr__(self):
+        return 'EquationSystem([' + ', '.join(repr(equation) for equation in self._equation_list) + '])'

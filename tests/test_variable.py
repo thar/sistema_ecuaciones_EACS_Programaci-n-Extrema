@@ -1,6 +1,7 @@
 import unittest
 from mock import patch, Mock
 
+from equationsolver.fraction import Fraction
 from equationsolver.variable import Variable
 from equationsolver.variable_builder import VariableBuilder
 
@@ -73,6 +74,18 @@ class VariableTestCase(unittest.TestCase):
         variable1 = VariableBuilder().name('x').build()
         name_set = ['z', 'y']
         self.assertFalse(variable1.has_name_set(name_set))
+
+    def testStrVariable(self):
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(1, 2)).build()), '+(1/2)*x')
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(-1, 2)).build()), '-(1/2)*x')
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(1, 1)).build()), '+x')
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(-1, 1)).build()), '-x')
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(-4, 2)).build()), '-2*x')
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(4, 2)).build()), '+2*x')
+        self.assertEqual(str(VariableBuilder().name('x').value(Fraction(0, 2)).build()), '+0*x')
+
+    def testReprVariable(self):
+        self.assertEqual(repr(VariableBuilder().name('x').value(Fraction(1, 2)).build()), 'Variable(\'x\', Fraction(1, 2))')
 
     @patch('equationsolver.term_visitor.TermVisitor')
     def testDispatcher(self, TermVisitor):

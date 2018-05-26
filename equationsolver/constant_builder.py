@@ -13,5 +13,9 @@ class ConstantBuilder:
             self._value = Fraction(value_arg, 1)
         return self
 
+    def fraction(self, num, den):
+        self._value = Fraction(num, den)
+        return self
+
     def build(self):
         return Constant(self._value)

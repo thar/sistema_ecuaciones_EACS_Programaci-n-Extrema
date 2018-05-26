@@ -1,14 +1,46 @@
 from copy import deepcopy
+from numbers import Number
 
 
 class Fraction:
     def __init__(self, num, den):
-        if isinstance(num, Fraction):
+        if not isinstance(num, Number):
             raise ValueError
-        if isinstance(den, Fraction):
+        if not isinstance(den, Number):
             raise ValueError
         self._num = num
         self._den = den
+        self._simplify()
+
+    def add_fraction(self, other):
+        self._num = self._num * other._den + other._num * self._den
+        self._den = self._den * other._den
+        self._simplify()
+
+    def multiply_fraction(self, fraction):
+        self._num *= fraction._num
+        self._den *= fraction._den
+        self._simplify()
+
+    def divide_fraction(self, fraction):
+        self.multiply_fraction(Fraction(fraction._den, fraction._num))
+
+    def _simplify(self):
+        if self._num == 0:
+            self._den = 1
+        a = abs(self._num)
+        b = abs(self._den)
+        if a != 0 and b > 1:
+            while b != 0:
+                if a > b:
+                    a -= b
+                else:
+                    b -= a
+            self._num /= a
+            self._den /= a
+        if self._den < 0:
+            self._den = abs(self._den)
+            self._num *= -1
 
     def __float__(self):
         return float(self._num) / self._den
@@ -36,11 +68,21 @@ class Fraction:
         temp -= other
         return temp
 
+    def __mod__(self, other):
+        temp = deepcopy(self)
+        temp %= other
+        return temp
+
+    def __floordiv__(self, other):
+        temp = deepcopy(self)
+        temp //= other
+        return temp
+
     def __imul__(self, other):
         if isinstance(other, Fraction):
             self.multiply_fraction(other)
         else:
-            self.multiply_value(other)
+            self.multiply_fraction(Fraction(other, 1))
         return self
 
     def __iadd__(self, other):
@@ -54,11 +96,20 @@ class Fraction:
         if isinstance(other, Fraction):
             self.divide_fraction(other)
         else:
-            self.divide_value(other)
+            self.divide_fraction(Fraction(other, 1))
         return self
 
     def __isub__(self, other):
         self.__iadd__(other * -1)
+        return self
+
+    def __imod__(self, other):
+        self -= self // other
+        return self
+
+    def __ifloordiv__(self, other):
+        self._num = int(float(self) // float(other))
+        self._den = 1
         return self
 
     def __radd__(self, other):
@@ -86,7 +137,7 @@ class Fraction:
         if isinstance(other, Fraction):
             return self._num == other._num and self._den == other._den
         else:
-            return self._num/self._den == other
+            return float(self) == float(other)
 
     def __ne__(self, other):
         result = self.__eq__(other)
@@ -106,45 +157,11 @@ class Fraction:
     def __gt__(self, other):
         return self >= other and self != other
 
-    def add_fraction(self, other):
-        self._num = self._num * other._den + other._num * self._den
-        self._den = self._den * other._den
-        self._simplify()
-
-    def multiply_value(self, value):
-        self.multiply_fraction(Fraction(value, 1))
-
-    def multiply_fraction(self, fraction):
-        self._num *= fraction._num
-        self._den *= fraction._den
-        self._simplify()
-
-    def divide_value(self, value):
-        self.multiply_fraction(Fraction(1, value))
-
-    def divide_fraction(self, fraction):
-        self.multiply_fraction(Fraction(fraction._den, fraction._num))
-
-    def _simplify(self):
-        a = abs(self._num)
-        b = abs(self._den)
-        if a != 0 and b > 1:
-            while b != 0:
-                if a > b:
-                    a -= b
-                else:
-                    b -= a
-            self._num /= a
-            self._den /= a
-        if self._den < 0:
-            self._den = abs(self._den)
-            self._num *= -1
-
     def __repr__(self):
         return 'Fraction(' + str(self._num) + ', ' + str(self._den) + ')'
 
     def __str__(self):
-        if self._den != 1:
+        if self._den != 1 and self._num != 0:
             return str(self._num) + '/' + str(self._den)
         else:
             return str(self._num)

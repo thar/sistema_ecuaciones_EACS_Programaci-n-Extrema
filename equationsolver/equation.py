@@ -212,3 +212,6 @@ class Equation:
 
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
+
+    def __repr__(self):
+        return 'Equation(' + repr(self._expression[Side.left]) + ', ' + repr(self._expression[Side.right]) + ')'
