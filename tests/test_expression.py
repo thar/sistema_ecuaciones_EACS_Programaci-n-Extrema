@@ -3,7 +3,6 @@ import unittest
 from equationsolver.constant_builder import ConstantBuilder
 from equationsolver.expression import NotSimplified
 from equationsolver.expression_builder import ExpressionBuilder
-from equationsolver.fraction import Fraction
 from equationsolver.variable_builder import VariableBuilder
 
 
@@ -157,6 +156,7 @@ class ExpressionTestCase(unittest.TestCase):
     # equal tests
     def testGivenTwoEmptyExpressionsWhenEqualThenReturnsTrue(self):
         self.assertTrue(ExpressionBuilder().build().equal(ExpressionBuilder().build()))
+        self.assertEqual(ExpressionBuilder().build(), ExpressionBuilder().build())
 
     def testGivenTwoExpressionsWithDefaultConstantWhenEqualThenReturnsTrue(self):
         self.assertTrue(ExpressionBuilder().default_constant().build().equal(
