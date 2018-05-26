@@ -1,9 +1,12 @@
-from equationsolver.solution_method import SolutionMethod
+from equationsolver.recursive_solution_method import RecursiveSolutionMethod
 
 
-class SubstitutionMethod(SolutionMethod):
+class SubstitutionMethod(RecursiveSolutionMethod):
     def __init__(self):
-        SolutionMethod.__init__(self)
+        RecursiveSolutionMethod.__init__(self)
 
-    def resolve(self):
+    def _preprocess_input_equation_system(self):
+        pass
+
+    def _resolve_recursive(self):
         pass
