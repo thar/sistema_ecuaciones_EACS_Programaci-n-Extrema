@@ -104,6 +104,19 @@ class ExpressionTestCase(unittest.TestCase):
         expression = ExpressionBuilder().term(VariableBuilder().name('x').build()).build()
         self.assertRaises(LookupError, expression.apply, 'y', 1.0)
 
+    # apply_expression tests
+    def testGivenExpressionWithVariableToReplaceWhenApplyExpressionThenResultantExpressionIsCorrect(self):
+        expression = ExpressionBuilder().variable_fraction('x', 3, 1).variable_fraction('y', 2, 1).constant_fraction(1, 2).build()
+        expression2 = ExpressionBuilder().variable_fraction('y', 2, 1).constant_fraction(1, 2).build()
+        expression.apply_expression('x', expression2)
+        self.assertEqual(expression, ExpressionBuilder().variable_fraction('y', 6, 1).constant_fraction(3, 2).variable_fraction('y', 2, 1).constant_fraction(1, 2).build())
+
+    def testGivenExpressionWithVariableToReplaceTwiceWhenApplyExpressionThenResultantExpressionIsCorrect(self):
+        expression = ExpressionBuilder().variable_fraction('x', 3, 1).variable_fraction('x', 1, 1).variable_fraction('y', 2, 1).build()
+        expression2 = ExpressionBuilder().variable_fraction('y', 2, 1).constant_fraction(1, 2).build()
+        expression.apply_expression('x', expression2)
+        self.assertEqual(expression, ExpressionBuilder().variable_fraction('y', 6, 1).constant_fraction(3, 2).variable_fraction('y', 2, 1).constant_fraction(1, 2).variable_fraction('y', 2, 1).build())
+
     # has_name tests
     def testGivenEmptyExpressionWhenHasNameThenReturnsFalse(self):
         expression = ExpressionBuilder().build()
