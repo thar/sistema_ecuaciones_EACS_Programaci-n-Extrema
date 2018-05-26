@@ -130,10 +130,15 @@ class Equation:
     class VariableSubstitutor(Operation):
         def __init__(self, variable_name, equation):
             Equation.Operation.__init__(self)
-            pass
+            self._variable_name = variable_name
+            temp_eq = equation.clon()
+            temp_eq.apply_operation(Equation.VariableIsolator(self._variable_name))
+            self._variable_expression = temp_eq._expression[Side.right]
 
         def apply(self):
-            pass
+            for side in Side:
+                if self._equation._expression[side].has_name(self._variable_name):
+                    self._equation._expression[side].apply_expression(self._variable_name, self._variable_expression)
 
     class EquationSimplifyer(Operation):
         def __init__(self):
