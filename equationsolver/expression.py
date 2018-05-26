@@ -102,16 +102,14 @@ class Expression:
             term.multiply(value)
             self.add_term(ConstantBuilder().value(term.value).build())
 
-    def equal(self, expression):
-        for term1 in self._term_list:
-            found = False
-            for term2 in expression._term_list:
-                if term1.equal(term2):
-                    found = True
-                    break
-            if not found:
-                return False
-        return True
+    def equal(self, other):
+        if len(self._term_list) != len(other._term_list):
+            return False
+        found_terms = []
+        for term in self._term_list:
+            if term in other._term_list:
+                found_terms.append(term)
+        return len(found_terms) == len(self._term_list)
 
     def clon(self):
         return deepcopy(self)

@@ -52,6 +52,27 @@ class EquationSystem:
             if eq.get_name_set().issuperset(variable_name_set):
                 return eq
 
+    def equal(self, other):
+        if len(self._equation_list) != len(other._equation_list):
+            return False
+        found_equations = []
+        for eq in self._equation_list:
+            if eq in other._equation_list:
+                found_equations.append(eq)
+        return len(found_equations) == len(self._equation_list)
+
+    def __eq__(self, other):
+        if not isinstance(other, EquationSystem):
+            return NotImplemented
+        else:
+            return self.equal(other)
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
     def __str__(self):
         return '\n'.join(str(equation) for equation in self._equation_list)
 

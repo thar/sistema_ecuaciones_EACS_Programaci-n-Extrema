@@ -7,6 +7,28 @@ from equationsolver.solution_method import SolutionMethod
 
 
 class EquationSystemTestCase(unittest.TestCase):
+    def testEqualsEquationSystem(self):
+        eq_system = EquationSystemBuilder().build()
+        eq_system.add(EquationBuilder.one_equals_x())
+        eq_system.add(EquationBuilder.y_equals_1())
+        eq_system2 = eq_system.clon()
+        self.assertEqual(eq_system, eq_system2)
+
+    def testEqualsEquationSystem2(self):
+        eq_system = EquationSystemBuilder().build()
+        eq_system.add(EquationBuilder.y_equals_1())
+        eq_system.add(EquationBuilder.one_equals_x())
+        eq_system2 = eq_system.clon()
+        self.assertEqual(eq_system, eq_system2)
+
+    def testEqualsEquationSystem3(self):
+        eq_system = EquationSystemBuilder().build()
+        eq_system.add(EquationBuilder.y_equals_1())
+        eq_system.add(EquationBuilder.one_equals_x())
+        eq_system2 = eq_system.clon()
+        eq_system.add(EquationBuilder().left_variable('z', 1, 0).right_default_constant().build())
+        self.assertNotEqual(eq_system, eq_system2)
+
     # add and get_name_set test
     def testGivenEmptySystemWhenAddEquationWithXThenXisPresent(self):
         eq_system = EquationSystemBuilder().build()
