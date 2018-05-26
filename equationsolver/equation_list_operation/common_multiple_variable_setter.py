@@ -1,6 +1,6 @@
 from equationsolver.equation import Side, Equation
-from equationsolver.operations.equation_list_operation import EquationListOperation
-from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
+from equationsolver.equation_list_operation.equation_list_operation import EquationListOperation
+from equationsolver.equation_list_operation.equation_list_operation_applier import EquationListOperationApplier
 
 
 class CommonMultipleVariableSetter(EquationListOperation):

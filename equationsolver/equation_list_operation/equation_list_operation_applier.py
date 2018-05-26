@@ -1,4 +1,4 @@
-from equationsolver.operations.equation_list_operation import EquationListOperation
+from equationsolver.equation_list_operation.equation_list_operation import EquationListOperation
 
 
 class EquationListOperationApplier(EquationListOperation):

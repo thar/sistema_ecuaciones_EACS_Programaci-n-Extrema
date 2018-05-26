@@ -1,5 +1,5 @@
 from equationsolver.equation import Equation, Side
-from equationsolver.operations.equation_list_simplify import EquationListSimplify
+from equationsolver.equation_list_operation.equation_list_simplify import EquationListSimplify
 from equationsolver.solution_method import SolutionMethod
 
 

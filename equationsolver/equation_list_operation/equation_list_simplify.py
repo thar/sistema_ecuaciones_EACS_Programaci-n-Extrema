@@ -1,5 +1,5 @@
 from equationsolver.equation import Side
-from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
+from equationsolver.equation_list_operation.equation_list_operation_applier import EquationListOperationApplier
 from equationsolver.equation import Equation
 
 
