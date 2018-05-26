@@ -1,9 +1,7 @@
 import unittest
-from mock import Mock
 
 from equationsolver.equation_builder import EquationBuilder
 from equationsolver.equation_system_builder import EquationSystemBuilder
-from equationsolver.solution_method import SolutionMethod
 
 
 class EquationSystemTestCase(unittest.TestCase):

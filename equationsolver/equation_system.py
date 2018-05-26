@@ -1,7 +1,6 @@
 from copy import deepcopy
 
 from equationsolver.equation import Side, Equation
-from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
 
 
 class EquationSystem:
