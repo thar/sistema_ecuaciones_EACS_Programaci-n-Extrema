@@ -210,6 +210,18 @@ class Equation:
     def is_solution_equation(self):
         return len(self.get_name_set()) == 1
 
+    def __eq__(self, other):
+        if not isinstance(other, Equation):
+            return NotImplemented
+        else:
+            return self.equal(other)
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
+
     def __str__(self):
         return str(self._expression[Side.left]) + ' = ' + str(self._expression[Side.right])
 

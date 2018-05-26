@@ -25,6 +25,30 @@ class EquationBuilder:
         self._right_expression.add_term(term)
         return self
 
+    def left_constant(self, value):
+        self._left_expression.add_term(ConstantBuilder().value(value).build())
+        return self
+
+    def right_constant(self, value):
+        self._right_expression.add_term(ConstantBuilder().value(value).build())
+        return self
+
+    def left_constant_fraction(self, num, den):
+        self._left_expression.add_term(ConstantBuilder().fraction(num, den).build())
+        return self
+
+    def right_constant_fraction(self, num, den):
+        self._right_expression.add_term(ConstantBuilder().fraction(num, den).build())
+        return self
+
+    def left_variable(self, name, num, den):
+        self._left_expression.add_term(VariableBuilder().name(name).fraction(num, den).build())
+        return self
+
+    def right_variable(self, name, num, den):
+        self._right_expression.add_term(VariableBuilder().name(name).fraction(num, den).build())
+        return self
+
     def left_default_constant(self):
         self._left_expression.add_term(ConstantBuilder().build())
         return self

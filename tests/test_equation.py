@@ -1,7 +1,7 @@
 import unittest
 
 from equationsolver.constant_builder import ConstantBuilder
-from equationsolver.equation import Side
+from equationsolver.equation import Side, Equation
 from equationsolver.equation_builder import EquationBuilder
 from equationsolver.expression import NotSimplified
 from equationsolver.variable_builder import VariableBuilder
@@ -51,6 +51,7 @@ class EquationTestCase(unittest.TestCase):
         equation2 = EquationBuilder.x_equals_1()
         equation1.add_equation(equation2)
         self.assertTrue(equation1.equal(equation2))
+        self.assertTrue(equation1 == equation2)
 
     def testGivenXIs0EquationWhenAddOIsYEquationThenYIsXEquationIsObtained(self):
         equation = EquationBuilder.x_equals_0()
@@ -59,6 +60,13 @@ class EquationTestCase(unittest.TestCase):
             ConstantBuilder().value(0).build()).right_term(ConstantBuilder().value(0).build()).right_term(
             VariableBuilder().name('y').value(1.0).build()).build()
         self.assertTrue(equation.equal(expected_equation))
+
+    def testGivenXIs1EquationAndXIs0WhenAskedForEqualityThenFalseIsReturned(self):
+        equation1 = EquationBuilder.x_equals_0()
+        equation2 = EquationBuilder.x_equals_1()
+        self.assertFalse(equation1.equal(equation2))
+        self.assertFalse(equation1 == equation2)
+        self.assertTrue(equation1 != equation2)
 
     # multiply tests
     def testGivenDefaultEquationWhenMultiplyBy1ThenSameEquationIsObtained(self):
@@ -215,6 +223,41 @@ class EquationTestCase(unittest.TestCase):
         eq = EquationBuilder.x_equals_1()
         eq.invert()
         self.assertEqual(eq.get_value_constant(Side.left), 1.0)
+
+    # EquationSimplifyer
+    def testEquationSimplifyer(self):
+        eq = EquationBuilder().left_constant(1).left_variable('x', 2, 1).left_variable('x', 1, 2).right_default_constant().build()
+        eq.apply_operation(Equation.EquationSimplifyer())
+        simplified_eq = EquationBuilder().left_constant(1).left_variable('x', 5, 2).right_default_constant().build()
+        self.assertEqual(eq, simplified_eq)
+
+    # VariableIsolator
+    def testVariableIsolator(self):
+        eq = EquationBuilder().left_constant(1).left_variable('x', 2, 1).right_variable('x', 1, 2).build()
+        eq.apply_operation(Equation.VariableIsolator('x'))
+        isolated_eq = EquationBuilder().left_variable('x', 1, 1).right_constant_fraction(-2, 3).build()
+        self.assertEqual(eq, isolated_eq)
+
+    def testVariableIsolatorWithMoreVariables(self):
+        eq = EquationBuilder().left_constant(1).left_variable('x', 2, 1).left_variable('y', 1, 1).right_variable('x', 1, 1).build()
+        eq.apply_operation(Equation.VariableIsolator('x'))
+        isolated_eq = EquationBuilder().left_variable('x', 1, 1).right_constant(-1).right_variable('y', -1, 1).build()
+        self.assertEqual(eq, isolated_eq)
+
+    # Normalizer
+    def testNormalizer(self):
+        # TODO
+        pass
+
+    # ConstantMover
+    def testConstantMover(self):
+        # TODO
+        pass
+
+    # VariableMover
+    def testVariableMover(self):
+        # TODO
+        pass
 
     def testStrEquation(self):
         self.assertEqual(str(EquationBuilder.x_equals_1()), '+x = +1')
