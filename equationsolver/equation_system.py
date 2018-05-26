@@ -10,6 +10,10 @@ class EquationSystem:
     def add(self, equation):
         self._equation_list.append(equation.clon())
 
+    def remove(self, equation):
+        if equation in self._equation_list:
+            self._equation_list.remove(equation)
+
     def get_name_set(self):
         name_set = set()
         for equation in self._equation_list:

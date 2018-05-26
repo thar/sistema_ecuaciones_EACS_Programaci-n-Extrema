@@ -20,10 +20,6 @@ class ReductionMethod(RecursiveSolutionMethod):
             EquationListOperationApplier(Equation.VariableMover(self._variable_to_reduce, Side.left)))
         self._equation_system.apply_operation(EquationListSimplify())
 
-    def _resolve_last_iteration(self):
-        self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
-            {self._variable_to_reduce}).clon()
-
     def _resolve_recursive(self):
         equation_system_to_recurse = self._equation_system.clon()
         equation_system_to_recurse.apply_operation(CommonMultipleVariableSetter(self._variable_to_reduce))

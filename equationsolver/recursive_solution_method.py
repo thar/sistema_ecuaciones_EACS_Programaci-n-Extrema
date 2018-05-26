@@ -33,7 +33,8 @@ class RecursiveSolutionMethod(SolutionMethod):
         raise NotImplemented
 
     def _resolve_last_iteration(self):
-        raise NotImplemented
+        self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
+            {self._variable_to_reduce}).clon()
 
     def _store_equation_to_resolve(self):
         self._equation_to_resolve = self._equation_system.get_equation_that_contains_name_set(
