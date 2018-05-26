@@ -127,7 +127,7 @@ class Equation:
                 Equation.ValueMultiplier(1.0 / self._equation.get_value_variable(Side.left, self._variable_name)))
             self._equation.apply_operation(Equation.EquationSimplifyer())
 
-    class VariableSubstitutor(Operation):
+    class VariableToExpressionApplier(Operation):
         def __init__(self, variable_name, equation):
             Equation.Operation.__init__(self)
             self._variable_name = variable_name

@@ -259,14 +259,14 @@ class EquationTestCase(unittest.TestCase):
         # TODO
         pass
 
-    # VariableSubstitutor
-    def testVariableSubstitutor(self):
+    # VariableToExpressionApplier
+    def tesVariableToExpressionApplier(self):
         # 1 + 2x + y = x
         eq = EquationBuilder().left_constant(1).left_variable('x', 2, 1).left_variable('y', 1, 1).right_variable('x', 1, 1).build()
         # 1 +x -y = y +1  ->  x = y + y  ->  x = 2y
         eq2 = EquationBuilder().left_constant(1).left_variable('x', 1, 1).left_variable('y', -1, 1).right_variable('y', 1, 1).right_constant_fraction(1, 1).build()
         # eq: 1 + 4y + y = 2y
-        eq.apply_operation(Equation.VariableSubstitutor('x', eq2))
+        eq.apply_operation(Equation.VariableToExpressionApplier('x', eq2))
         resultant_eq = EquationBuilder().left_constant(1).left_variable('y', 4, 1).left_variable('y', 1, 1).right_variable('y', 2, 1).build()
         self.assertEqual(eq, resultant_eq)
 
