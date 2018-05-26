@@ -20,11 +20,13 @@ class ConstantTestCase(unittest.TestCase):
         variable1 = ConstantBuilder().value(3.0).build()
         variable2 = ConstantBuilder().value(3.0).build()
         self.assertTrue(variable1.equal(variable2))
+        self.assertEqual(variable1, variable2)
 
     def testEqualWithConstantNegative(self):
         variable1 = ConstantBuilder().value(3.0).build()
         variable2 = ConstantBuilder().value(3.1).build()
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testEqualWithVariableSameValueNegative(self):
         variable1 = ConstantBuilder().value(2.0).build()
@@ -32,6 +34,7 @@ class ConstantTestCase(unittest.TestCase):
         variable2.value = 2.0
         variable2.dispatch = Mock(side_effect=lambda x: x.visit_variable(variable2))
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testEqualWithVariableDifferentValueNegative(self):
         variable1 = ConstantBuilder().value(3.0).build()
@@ -39,6 +42,7 @@ class ConstantTestCase(unittest.TestCase):
         variable2.value = 3.1
         variable2.dispatch = Mock(side_effect=lambda x: x.visit_variable(variable2))
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testClon(self):
         variable1 = ConstantBuilder().build()

@@ -2,7 +2,6 @@ import unittest
 from mock import patch, Mock
 
 from equationsolver.fraction import Fraction
-from equationsolver.variable import Variable
 from equationsolver.variable_builder import VariableBuilder
 
 
@@ -26,16 +25,19 @@ class VariableTestCase(unittest.TestCase):
         variable1 = VariableBuilder().name('x').value(3.0).build()
         variable2 = VariableBuilder().name('x').value(3.1).build()
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testEqualNegativeName(self):
         variable1 = VariableBuilder().name('x').value(3.0).build()
         variable2 = VariableBuilder().name('y').value(3.0).build()
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testEqualNegativeValueAndName(self):
         variable1 = VariableBuilder().name('x').value(3.0).build()
         variable2 = VariableBuilder().name('y').value(3.1).build()
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testEqualWithConstantSameValueNegative(self):
         variable1 = VariableBuilder().value(3.0).build()
@@ -43,6 +45,7 @@ class VariableTestCase(unittest.TestCase):
         variable2.value = 3.0
         variable2.dispatch = Mock(side_effect=lambda x: x.visit_constant(variable2))
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testEqualWithConstantDifferentValueNegative(self):
         variable1 = VariableBuilder().value(3.0).build()
@@ -50,6 +53,7 @@ class VariableTestCase(unittest.TestCase):
         variable2.value = 2.0
         variable2.dispatch = Mock(side_effect=lambda x: x.visit_constant(variable2))
         self.assertFalse(variable1.equal(variable2))
+        self.assertNotEqual(variable1, variable2)
 
     def testClon(self):
         variable1 = VariableBuilder().build()

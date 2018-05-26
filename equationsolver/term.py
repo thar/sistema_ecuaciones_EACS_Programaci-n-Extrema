@@ -23,3 +23,12 @@ class Term:
 
     def dispatch(self, term_visitor):
         raise NotImplemented
+
+    def __eq__(self, other):
+        return self.equal(other)
+
+    def __ne__(self, other):
+        result = self.__eq__(other)
+        if result is NotImplemented:
+            return result
+        return not result
