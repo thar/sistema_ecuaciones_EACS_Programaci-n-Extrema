@@ -1,6 +1,5 @@
 from equationsolver.equation import Side, Equation
 from equationsolver.operations.common_multiple_variable_setter import CommonMultipleVariableSetter
-from equationsolver.operations.equation_list_equation_sum import EquationListEquationSum
 from equationsolver.operations.equation_list_operation_applier import EquationListOperationApplier
 from equationsolver.operations.equation_list_simplify import EquationListSimplify
 from equationsolver.recursive_solution_method import RecursiveSolutionMethod
@@ -41,4 +40,4 @@ class ReductionMethod(RecursiveSolutionMethod):
 
     def _reduce_all_equations(self, equation_system_to_recurse):
         self._equation_to_reduce.multiply(-1.0)
-        equation_system_to_recurse.apply_operation(EquationListEquationSum(self._equation_to_reduce))
+        equation_system_to_recurse.apply_operation(EquationListOperationApplier(Equation.SumEquation(self._equation_to_reduce)))
