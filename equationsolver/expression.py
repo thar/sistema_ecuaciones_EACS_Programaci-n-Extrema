@@ -102,6 +102,17 @@ class Expression:
             term.multiply(value)
             self.add_term(ConstantBuilder().value(term.value).build())
 
+    def apply_expression(self, name, expression):
+        terms_counter_analyzer = TermsCounterAnalyzer(self._term_list)
+        terms = terms_counter_analyzer.get_variables_with_name(name)
+        if len(terms) == 0:
+            raise LookupError
+        self._remove_terms(terms)
+        for term in terms:
+            temp_expression = expression.clon()
+            temp_expression.multiply(term.value)
+            self.add_expression(temp_expression)
+
     def equal(self, other):
         if len(self._term_list) != len(other._term_list):
             return False
