@@ -39,6 +39,19 @@ class EquationSystemTestCase(unittest.TestCase):
         eq_system.add(EquationBuilder.y_equals_1())
         self.assertEqual(eq_system.get_name_set(), {'x', 'y'})
 
+    def testGivenSystemWithOneEuationWhenRemoveThisEquationThenSystemHasNoNames(self):
+        eq_system = EquationSystemBuilder().build()
+        eq_system.add(EquationBuilder.one_equals_x())
+        eq_system.remove(EquationBuilder.one_equals_x())
+        self.assertEqual(eq_system.get_name_set(), set())
+
+    def testGivenSystemWithTwoEquationsWithDifferentVariablesWhenRemoveOneVariableEquationThenSystemTheOtherVariableName(self):
+        eq_system = EquationSystemBuilder().build()
+        eq_system.add(EquationBuilder.one_equals_x())
+        eq_system.add(EquationBuilder.y_equals_1())
+        eq_system.remove(EquationBuilder.one_equals_x())
+        self.assertEqual(eq_system.get_name_set(), {'y'})
+
     def testStrEquationSystem(self):
         eq_system = EquationSystemBuilder().build()
         eq_system.add(EquationBuilder.one_equals_x())
