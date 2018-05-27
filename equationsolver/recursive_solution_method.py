@@ -50,8 +50,7 @@ class RecursiveSolutionMethod(SolutionMethod):
     def _merge_solutions(self):
         for variable_name in self._solution_method_recurse.get_solutions_name_set():
             variable_solution_equation = self._solution_method_recurse.get_solution(variable_name)
-            variable_solution_value = variable_solution_equation.get_value_constant(Side.right)
             self.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
-                self._equation_to_resolve.apply_operation(Equation.ValueApplier(variable_name, variable_solution_value))
+                self._equation_to_resolve.apply_operation(Equation.VariableToExpressionApplier(variable_name, variable_solution_equation))
         self._equation_to_resolve.apply_operation(Equation.EquationSimplifyer())

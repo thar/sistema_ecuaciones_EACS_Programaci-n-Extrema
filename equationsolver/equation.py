@@ -53,19 +53,6 @@ class Equation:
             for side in Side:
                 self._equation._expression[side].multiply(self._value)
 
-    class ValueApplier(Operation):
-        def __init__(self, name, value):
-            Equation.Operation.__init__(self)
-            self._name = name
-            self._value = value
-
-        def apply(self):
-            if self._name not in self._equation.get_name_set():
-                raise LookupError
-            for side in Side:
-                if self._name in self._equation._expression[side].get_name_set():
-                    self._equation._expression[side].apply(self._name, self._value)
-
     class TermMover(Operation):
         def __init__(self, side_to_move_to):
             Equation.Operation.__init__(self)
@@ -136,6 +123,8 @@ class Equation:
             self._variable_expression = temp_eq._expression[Side.right]
 
         def apply(self):
+            if self._variable_name not in self._equation.get_name_set():
+                raise LookupError
             for side in Side:
                 if self._equation._expression[side].has_name(self._variable_name):
                     self._equation._expression[side].apply_expression(self._variable_name, self._variable_expression)
@@ -147,7 +136,8 @@ class Equation:
 
         def apply(self):
             for variable_name, solution_eq in self._solutions.iteritems():
-                self._equation.apply_operation(Equation.ValueApplier(variable_name, solution_eq.get_value_constant(Side.right)))
+                self._equation.apply_operation(
+                    Equation.VariableToExpressionApplier(variable_name, solution_eq))
 
     class EquationSimplifyer(Operation):
         def __init__(self):
@@ -191,7 +181,8 @@ class Equation:
         self.apply_operation(Equation.ValueMultiplier(value))
 
     def apply(self, name, value):
-        self.apply_operation(Equation.ValueApplier(name, value))
+        self.apply_operation(Equation.VariableToExpressionApplier(name, Equation(
+            ExpressionBuilder().variable_fraction(name, 1, 1).build(), ExpressionBuilder().constant(value).build())))
 
     def normalize(self):
         self.apply_operation(Equation.Normalizer())
