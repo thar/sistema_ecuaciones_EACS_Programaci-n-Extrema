@@ -140,6 +140,15 @@ class Equation:
                 if self._equation._expression[side].has_name(self._variable_name):
                     self._equation._expression[side].apply_expression(self._variable_name, self._variable_expression)
 
+    class SolutionEquationsApplier(Operation):
+        def __init__(self, solution_equations_dictionary):
+            Equation.Operation.__init__(self)
+            self._solutions = solution_equations_dictionary
+
+        def apply(self):
+            for variable_name, solution_eq in self._solutions.iteritems():
+                self._equation.apply_operation(Equation.ValueApplier(variable_name, solution_eq.get_value_constant(Side.right)))
+
     class EquationSimplifyer(Operation):
         def __init__(self):
             Equation.Operation.__init__(self)

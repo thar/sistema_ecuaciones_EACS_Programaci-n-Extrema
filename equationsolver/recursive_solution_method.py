@@ -1,5 +1,6 @@
 from equationsolver.equation import Equation, Side
 from equationsolver.equation_list_operation.equation_list_simplify import EquationListSimplify
+from equationsolver.equation_list_operation.equation_list_solution_extractor import EquationListSolutionExtractor
 from equationsolver.solution_method import SolutionMethod
 
 
@@ -12,7 +13,9 @@ class RecursiveSolutionMethod(SolutionMethod):
 
     def resolve(self):
         self._equation_system.apply_operation(EquationListSimplify())
-        self._solutions.update(self._equation_system.pop_solution_equations())
+        solutions_extractor = EquationListSolutionExtractor()
+        self._equation_system.apply_operation(solutions_extractor)
+        self._solutions.update(solutions_extractor.solutions)
         name_set = self._equation_system.get_name_set()
         if len(name_set) == 0:
             return
