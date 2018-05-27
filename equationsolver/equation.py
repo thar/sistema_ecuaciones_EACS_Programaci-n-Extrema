@@ -35,7 +35,7 @@ class Equation:
             self._equation._expression[Side.left].add_term(self._term)
             self._equation._expression[Side.right].add_term(self._term)
 
-    class SumEquation(Operation):
+    class EquationAdder(Operation):
         def __init__(self, equation):
             Equation.Operation.__init__(self)
             self._equation_to_add = equation
@@ -114,13 +114,11 @@ class Equation:
                 Equation.ValueMultiplier(1.0 / self._equation.get_value_variable(Side.left, self._variable_name)))
             self._equation.apply_operation(Equation.EquationSimplifyer())
 
-    class VariableToExpressionApplier(Operation):
-        def __init__(self, variable_name, equation):
+    class ExpressionApplier(Operation):
+        def __init__(self, variable_name, expression):
             Equation.Operation.__init__(self)
             self._variable_name = variable_name
-            temp_eq = equation.clon()
-            temp_eq.apply_operation(Equation.VariableIsolator(self._variable_name))
-            self._variable_expression = temp_eq._expression[Side.right]
+            self._variable_expression = expression
 
         def apply(self):
             if self._variable_name not in self._equation.get_name_set():
@@ -128,6 +126,12 @@ class Equation:
             for side in Side:
                 if self._equation._expression[side].has_name(self._variable_name):
                     self._equation._expression[side].apply_expression(self._variable_name, self._variable_expression)
+
+    class EquationApplier(ExpressionApplier):
+        def __init__(self, variable_name, equation):
+            temp_eq = equation.clon()
+            temp_eq.apply_operation(Equation.VariableIsolator(variable_name))
+            Equation.ExpressionApplier.__init__(self, variable_name, temp_eq._expression[Side.right])
 
     class SolutionEquationsApplier(Operation):
         def __init__(self, solution_equations_dictionary):
@@ -137,7 +141,7 @@ class Equation:
         def apply(self):
             for variable_name, solution_eq in self._solutions.iteritems():
                 self._equation.apply_operation(
-                    Equation.VariableToExpressionApplier(variable_name, solution_eq))
+                    Equation.EquationApplier(variable_name, solution_eq))
 
     class EquationSimplifyer(Operation):
         def __init__(self):
@@ -172,7 +176,7 @@ class Equation:
         op(self)
 
     def add_equation(self, equation):
-        self.apply_operation(Equation.SumEquation(equation))
+        self.apply_operation(Equation.EquationAdder(equation))
 
     def add(self, term):
         self.apply_operation(Equation.AddTermBothSides(term))
@@ -181,7 +185,7 @@ class Equation:
         self.apply_operation(Equation.ValueMultiplier(value))
 
     def apply(self, name, value):
-        self.apply_operation(Equation.VariableToExpressionApplier(name, Equation(
+        self.apply_operation(Equation.EquationApplier(name, Equation(
             ExpressionBuilder().variable_fraction(name, 1, 1).build(), ExpressionBuilder().constant(value).build())))
 
     def normalize(self):

@@ -1,4 +1,4 @@
-from equationsolver.equation import Equation, Side
+from equationsolver.equation import Equation
 from equationsolver.equation_list_operation.equation_list_simplify import EquationListSimplify
 from equationsolver.equation_list_operation.equation_list_solution_extractor import EquationListSolutionExtractor
 from equationsolver.solution_method import SolutionMethod
@@ -52,5 +52,6 @@ class RecursiveSolutionMethod(SolutionMethod):
             variable_solution_equation = self._solution_method_recurse.get_solution(variable_name)
             self.set_solution(variable_name, variable_solution_equation)
             if variable_name in self._equation_to_resolve.get_name_set():
-                self._equation_to_resolve.apply_operation(Equation.VariableToExpressionApplier(variable_name, variable_solution_equation))
+                self._equation_to_resolve.apply_operation(
+                    Equation.EquationApplier(variable_name, variable_solution_equation))
         self._equation_to_resolve.apply_operation(Equation.EquationSimplifyer())

@@ -36,4 +36,4 @@ class ReductionMethod(RecursiveSolutionMethod):
 
     def _reduce_all_equations(self, equation_system_to_recurse):
         self._equation_to_reduce.multiply(-1.0)
-        equation_system_to_recurse.apply_operation(EquationListOperationApplier(Equation.SumEquation(self._equation_to_reduce)))
+        equation_system_to_recurse.apply_operation(EquationListOperationApplier(Equation.EquationAdder(self._equation_to_reduce)))
