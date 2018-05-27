@@ -28,25 +28,6 @@ class EquationSystem:
             if name in eq.get_name_set():
                 return eq
 
-    def pop_solution_equations(self):
-        temporal_equations = []
-        found_solutions = {}
-        for eq in self._equation_list:
-            if eq.is_solution_equation():
-                solved_variable = eq.get_name_set().pop()
-                eq.apply_operation(Equation.VariableIsolator(solved_variable))
-                found_solutions[solved_variable] = eq
-            else:
-                temporal_equations.append(eq)
-        self._equation_list = temporal_equations
-        self.apply_solutions(found_solutions)
-        return found_solutions
-
-    def apply_solutions(self, solutions):
-        for eq in self._equation_list:
-            for variable_name, solution_eq in solutions.iteritems():
-                eq.apply_operation(Equation.ValueApplier(variable_name, solution_eq.get_value_constant(Side.right)))
-
     def clon(self):
         return deepcopy(self)
 
